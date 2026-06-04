@@ -210,3 +210,12 @@
   .hud-status .status-stat{ display:none; }
   .section{ padding-block:var(--sp-5); }
 }
+
+/* ===================== custom cursor ===================== */
+.cursor-dot,.cursor-ring{ position:fixed; top:0; left:0; pointer-events:none; z-index:9999; border-radius:50%; mix-blend-mode:difference; will-change:transform; }
+.cursor-dot{ width:7px; height:7px; margin:-3.5px; background:#fff; }
+.cursor-ring{ width:34px; height:34px; margin:-17px; border:1px solid rgba(255,255,255,.7);
+  transition:width .25s var(--e-out),height .25s var(--e-out),margin .25s var(--e-out),background .25s; }
+.cursor-ring.is-grow{ width:58px; height:58px; margin:-29px; background:rgba(31,162,214,.14); }
+.cursor-ring.is-press{ width:26px; height:26px; margin:-13px; }
+@media (pointer:coarse){ .cursor-dot,.cursor-ring{ display:none; } }

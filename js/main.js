@@ -12,6 +12,7 @@ import { initContact } from './contact.js';
 import { initRail } from './rail.js';
 import { initReveals } from './reveal.js';
 import { initHeroAbout } from './heroAbout.js';
+import { initCursor } from './cursor.js';
 
 const gsap = window.gsap, ScrollTrigger = window.ScrollTrigger, Flip = window.Flip;
 if (gsap && ScrollTrigger) gsap.registerPlugin(ScrollTrigger, ...(Flip ? [Flip] : []));
@@ -59,6 +60,7 @@ async function boot(pl) {
   // 2) smooth scroll + reveals
   safe('smooth', () => initSmooth());
   safe('reveals', () => initReveals(ctx));
+  safe('cursor', () => initCursor(ctx));
 
   // 3) refresh once fonts are in (layout shifts otherwise mis-measure pins)
   try { await document.fonts.ready; } catch {}
