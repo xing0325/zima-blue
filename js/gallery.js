@@ -11,7 +11,7 @@ const hexA = (hex, a) => {
 export function initGallery(ctx) {
   const data = ctx.data.projects;
   const canvas = document.querySelector('[data-graph]');
-  if (!data || !canvas) return;
+  if (!data || !Array.isArray(data.nodes) || !canvas) return;
   const wrap = canvas.parentElement;
   const c = canvas.getContext('2d');
   const groups = data.groups || {};
@@ -92,7 +92,9 @@ export function initGallery(ctx) {
   }
 
   for (let i = 0; i < 130; i++) step();
-  (function loop(t) { if (!reduce) step(); draw(t || 0); requestAnimationFrame(loop); })(0);
+  let visible = true;
+  if ('IntersectionObserver' in window) new IntersectionObserver((es) => { visible = es[0].isIntersecting; }, { threshold: 0 }).observe(wrap);
+  (function loop(t) { if (visible) { if (!reduce) step(); draw(t || 0); } requestAnimationFrame(loop); })(0);
 
   canvas.addEventListener('pointerdown', (e) => {
     dragging = true; moved = false; last = { x: e.clientX, y: e.clientY };

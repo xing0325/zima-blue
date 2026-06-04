@@ -41,10 +41,12 @@ function initRipples(ctx) {
   const ripples = [];
   const spawn = (x, y, text) => ripples.push({ x, y, r: 6, max: 130 + Math.random() * 80, text: text || null });
 
-  let last = 0;
+  let last = 0, visible = true;
+  if ('IntersectionObserver' in window) new IntersectionObserver((es) => { visible = es[0].isIntersecting; }, { threshold: 0 }).observe(stage);
   (function loop(t) {
+    if (!visible || ctx.reduce) { requestAnimationFrame(loop); return; }   // idle when off-screen / reduced-motion
     c.clearRect(0, 0, W, H);
-    if (!ctx.reduce && t - last > 2400) { last = t; spawn(Math.random() * W, H * 0.34 + Math.random() * H * 0.42); }
+    if (t - last > 2400) { last = t; spawn(Math.random() * W, H * 0.34 + Math.random() * H * 0.42); }
     for (let i = ripples.length - 1; i >= 0; i--) {
       const rp = ripples[i]; rp.r += 1.35;
       const a = Math.max(0, 1 - rp.r / rp.max);

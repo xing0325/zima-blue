@@ -40,19 +40,25 @@ async function boot(pl) {
 
   const ctx = { data, gsap, ScrollTrigger, Flip, reduce, get lenis() { return lenis; } };
 
-  // 1) render content first so ScrollTrigger measures correct heights
-  initStatus(ctx);
-  initChangelog(ctx);
-  initWorkflow(ctx);
-  initResearch(ctx);
-  initGallery(ctx);
-  initContact(ctx);
-  initHeroAbout(ctx);
-  initRail(ctx);
+  // 1) render content first so ScrollTrigger measures correct heights.
+  //    Each init is isolated — one section throwing can never cascade and halt
+  //    the rest (critical on file:// where every data/*.json is null).
+  const safe = (name, fn) => {
+    try { const r = fn(); if (r && typeof r.then === 'function') r.catch((e) => console.error(`[zima] ${name}:`, e)); }
+    catch (e) { console.error(`[zima] ${name}:`, e); }
+  };
+  safe('status', () => initStatus(ctx));
+  safe('changelog', () => initChangelog(ctx));
+  safe('workflow', () => initWorkflow(ctx));
+  safe('research', () => initResearch(ctx));
+  safe('gallery', () => initGallery(ctx));
+  safe('contact', () => initContact(ctx));
+  safe('heroAbout', () => initHeroAbout(ctx));
+  safe('rail', () => initRail(ctx));
 
   // 2) smooth scroll + reveals
-  initSmooth();
-  initReveals(ctx);
+  safe('smooth', () => initSmooth());
+  safe('reveals', () => initReveals(ctx));
 
   // 3) refresh once fonts are in (layout shifts otherwise mis-measure pins)
   try { await document.fonts.ready; } catch {}

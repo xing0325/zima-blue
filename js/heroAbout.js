@@ -61,6 +61,7 @@ export function initHeroAbout(ctx) {
 
   // hero intro — played once after the preloader dissolves
   ctx.heroIntro = () => {
+    if (!voidInner) return;
     gsap.from(voidInner, { opacity: 0, scale: 1.12, duration: 1.1, ease: 'power3.out' });
     gsap.from(voidInner.children, { opacity: 0, y: 16, duration: 0.9, stagger: 0.08, ease: 'power3.out', delay: 0.1 });
   };
