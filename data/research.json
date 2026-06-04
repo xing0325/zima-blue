@@ -1,0 +1,4 @@
+[
+  { "id": "werewolf-markov", "title": "狼人杀与马尔可夫链", "question": "能不能用马尔可夫链，刻画一局狼人杀里信息与局势的演化？", "status": "wip", "demo": "" },
+  { "id": "game-balance",    "title": "如何找到棋类游戏的平衡性", "question": "有没有一种可量化的方法，去寻找一个棋类游戏的平衡点？", "status": "wip", "demo": "" }
+]

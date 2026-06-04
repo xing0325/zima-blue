@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh" class="lenis">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>chichu — 一格齐马蓝</title>
+  <meta name="description" content="chichu，十八岁 vibe coder。一个齐马蓝主题的个人站：作品、工作流，与那些我感兴趣的怪问题。">
+  <meta name="theme-color" content="#04070d">
+  <meta property="og:title" content="chichu — 一格齐马蓝">
+  <meta property="og:description" content="一个刚起步的 vibe coder 积压十几年的灵感。全部开源。">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=JetBrains+Mono:wght@300;400&display=swap">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/sections.css">
+
+  <!-- libraries (classic scripts execute before the deferred module) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.1.14/lenis.min.js"></script>
+</head>
+
+<body>
+  <!-- ===== Preloader: a pool tile fills with Zima blue ===== -->
+  <div id="preloader" aria-hidden="true">
+    <div class="pl-tile"><span class="pl-fill"></span></div>
+    <div class="pl-meta">
+      <span class="pl-pct mono">0%</span>
+      <span class="pl-word mono">注满一格蓝</span>
+    </div>
+  </div>
+
+  <!-- ===== Fixed HUD ===== -->
+  <header class="hud">
+    <a class="hud-brand" href="#top" aria-label="chichu — 回到顶部">
+      <span class="hud-brand-dot"></span> chichu
+    </a>
+    <div class="hud-right">
+      <button class="hud-status" data-status-chip type="button" title="在线状态 · 今日 Claude 数据">
+        <span class="status-dot" data-online-dot></span>
+        <span class="status-label mono" data-online-label>离线</span>
+        <span class="status-sep">·</span>
+        <span class="status-stat mono"><b data-stat="tokens">0</b> tok</span>
+        <span class="status-stat mono"><b data-stat="minutes">0</b> min</span>
+      </button>
+      <button class="hud-log mono" data-open-log type="button">日志</button>
+    </div>
+  </header>
+
+  <!-- section progress rail (filled by JS) -->
+  <nav class="rail" aria-label="章节导航" data-rail></nav>
+
+  <main id="top">
+
+    <!-- ===== 01→02 · Hero → About (one pinned, scroll-driven stage) ===== -->
+    <section id="hero-about" class="pin-stage" data-beat="01">
+      <!-- depth starfields -->
+      <div class="stars" data-stars="far"></div>
+      <div class="stars" data-stars="near"></div>
+      <!-- Zima-blue bloom revealed on scroll -->
+      <div class="bloom" data-bloom></div>
+      <div class="vignette"></div>
+
+      <!-- THE VOID -->
+      <div class="scene void" data-scene="void">
+        <div class="void-inner" data-void-inner>
+          <span class="void-dot" data-void-dot></span>
+          <h1 class="void-mark">chichu</h1>
+          <p class="void-tag mono">十八岁 · vibe coder · 在寻找更好的交互</p>
+        </div>
+        <div class="scroll-cue mono" data-scroll-cue>向下滚动 ↓ 开始下潜</div>
+      </div>
+
+      <!-- RESOLVE / About -->
+      <div class="scene resolve" data-scene="resolve">
+        <svg class="sig" viewBox="0 0 760 240" fill="none" aria-label="chichu 的签名" data-signature>
+          <path class="sig-main" d="M70 168 C54 120 116 96 124 138 C130 172 132 58 152 58 C170 58 150 152 168 138 C182 127 188 152 200 150 C214 148 206 104 214 102 C222 150 240 172 256 138 C238 112 290 96 300 138 C306 172 308 58 328 58 C346 58 326 152 346 138 C362 126 374 152 392 150 C408 148 400 104 410 102 C414 150 436 164 456 138 C464 127 460 100 468 94 C482 112 540 150 660 118"
+                stroke="#f6fdff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path class="sig-flourish" d="M60 206 C220 184 440 234 690 188" stroke="#d6f1ff" stroke-width="3.5" stroke-linecap="round"/>
+        </svg>
+        <p class="resolve-label label" data-bio-lead>关于 · chichu</p>
+        <div class="resolve-lines" data-bio></div>
+      </div>
+    </section>
+
+    <!-- ===== 03 · Project gallery (constellation) ===== -->
+    <section id="gallery" class="section" data-beat="03">
+      <div class="container">
+        <header class="sec-head">
+          <span class="label">03 / 星图</span>
+          <h2 class="sec-title serif">项目画廊</h2>
+          <p class="sec-sub">这片宇宙就是我的项目关系图谱。大点是大项目，小点是分支与更新；正在更新的会脉冲。点开一个，看看它走到哪了——喜欢就给它点个『蹲蹲』。</p>
+        </header>
+        <div class="gallery-grid">
+          <div class="graph-wrap"><canvas data-graph></canvas><div class="graph-hint mono">拖拽平移 · 点击节点展开</div></div>
+          <aside class="dudu-board" data-dudu-board>
+            <div class="dudu-head"><span class="label">蹲蹲榜单</span><span class="mono dudu-sub">期待值排序</span></div>
+            <ol class="dudu-list" data-dudu-list></ol>
+          </aside>
+        </div>
+      </div>
+      <div class="project-detail" data-project-detail aria-hidden="true"></div>
+    </section>
+
+    <!-- ===== 04 · Workflow sharing (the grid) ===== -->
+    <section id="workflow" class="section section-paper" data-beat="04">
+      <div class="container">
+        <header class="sec-head">
+          <span class="label">04 / 瓷砖网格</span>
+          <h2 class="sec-title serif">我的工作流</h2>
+          <p class="sec-sub">不断更新的工作流分享。每一块都是我自己天天在用的——觉得哪里能更好，直接给它提个 issue。</p>
+        </header>
+        <div class="wf-grid" data-workflows></div>
+      </div>
+    </section>
+
+    <!-- ===== 05 · Research topics ===== -->
+    <section id="research" class="section" data-beat="05">
+      <div class="container">
+        <header class="sec-head">
+          <span class="label">05 / 怪问题</span>
+          <h2 class="sec-title serif">我研究的课题</h2>
+          <p class="sec-sub">那些我感兴趣、可能怪怪的问题。点开就是一个独立的 HTML demo。</p>
+        </header>
+        <div class="rs-grid" data-research></div>
+      </div>
+    </section>
+
+    <!-- ===== 06 · The tile / Contact + ripples message board ===== -->
+    <section id="contact" class="pin-stage tile-stage" data-beat="06">
+      <div class="pool" data-pool>
+        <canvas class="ripple-canvas" data-ripples></canvas>
+        <div class="tile" data-tile>
+          <div class="tile-face">
+            <p class="tile-title serif">一格齐马蓝</p>
+            <p class="tile-sub mono">the whole universe, in one tile</p>
+            <ul class="contact-list" data-contacts></ul>
+          </div>
+        </div>
+        <form class="msg-form" data-msg-form>
+          <input class="msg-input" data-msg-input maxlength="80" placeholder="在水面留下一句话…" aria-label="留言">
+          <button class="msg-send mono" type="submit">荡开 ↵</button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== Changelog drawer (航行日志) ===== -->
+  <aside id="logDrawer" class="drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <span class="label">航行日志 · changelog</span>
+      <button class="drawer-close" data-close-log aria-label="关闭">✕</button>
+    </div>
+    <div class="drawer-body" data-changelog></div>
+    <div class="drawer-foot mono" data-changelog-foot></div>
+  </aside>
+  <div class="drawer-scrim" data-close-log></div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

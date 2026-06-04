@@ -1,0 +1,21 @@
+{
+  "name": "chichu",
+  "age": 18,
+  "role": "vibe coder",
+  "tagline": "一直在找——更好的交互，到底长什么样。",
+  "bioLead": "我叫 chichu，一名十八岁的 vibe coder。",
+  "bio": [
+    "最喜欢做的事，是整理电脑和电子笔记、不断迭代自己的工作流——对工具有自己独特的审美。",
+    "对平面设计的兴趣，在 coding 里变成了对 UI/UX 的痴迷。",
+    "这里有一个刚起步的 vibe coder 积压了十几年的灵感：一些小 demo 游戏、一些为自己造的 dogfood 工具（用来降低我电子大脑的操作熵）、一些我写的 skills 和插件，以及那些我感兴趣的跨学科课题（常做成 HTML 展示）。",
+    "其中也有许多『未完成』，它们静静躺在列表里——你可以跟进它们的进度，也可以给喜欢的项目点一下『蹲蹲』。你的期待，是我推进项目的第二大动力。",
+    "全部开源，欢迎来提 issue。"
+  ],
+  "motivation": { "first": "我的好奇心", "second": "你的蹲蹲" },
+  "contacts": [
+    { "label": "GitHub",  "handle": "xing0325", "url": "https://github.com/xing0325", "icon": "github" },
+    { "label": "小红书",   "handle": "@chichu",  "url": "",  "icon": "xhs",    "_note": "填上你的小红书主页链接" },
+    { "label": "微信",     "handle": "加我聊聊",  "url": "",  "icon": "wechat", "_note": "可放二维码图片路径 assets/wechat.png" },
+    { "label": "邮箱",     "handle": "",         "url": "mailto:", "icon": "mail", "_note": "填上你的联系邮箱" }
+  ]
+}

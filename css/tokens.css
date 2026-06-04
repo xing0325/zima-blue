@@ -1,0 +1,79 @@
+/* =====================================================================
+   Zima Blue — Design Tokens (single source of truth)
+   "A 深空" base palette + "C 瓷砖纸感" structural palette
+   ===================================================================== */
+:root {
+  /* ---- A · 深空 deep-space palette ---- */
+  --void:        #04070d;   /* primary background — near-black with blue */
+  --void-1:      #070e18;
+  --void-2:      #0b1422;
+  --void-panel:  #0d1826;   /* lifted cards/panels */
+
+  /* ---- THE colour: 齐马蓝 ---- */
+  --zima:        #1FA2D6;   /* the one signature blue */
+  --zima-bright: #36c0ef;
+  --zima-glow:   #5fd2f5;
+  --zima-deep:   #0c6f9f;
+  --zima-abyss:  #063b58;
+
+  /* ---- ink (text on dark) ---- */
+  --ink:         #eaf4fb;
+  --ink-soft:    #bcd2e2;
+  --ink-dim:     #7f9cb0;
+  --ink-faint:   #4f6678;
+  --line:        rgba(127,180,220,.14);
+  --line-strong: rgba(127,180,220,.28);
+
+  /* ---- C · 瓷砖纸感 paper palette ---- */
+  --paper:       #f1efe7;
+  --paper-2:     #e7e3d7;
+  --paper-ink:   #11161c;
+  --paper-dim:   #566069;
+  --tile-line:   rgba(20,40,55,.10);
+
+  /* ---- semantic ---- */
+  --bg:     var(--void);
+  --fg:     var(--ink);
+  --accent: var(--zima);
+  --live:   #46e0a0;   /* online */
+  --offline:#5a6b78;
+  --hot:    #ff7a7a;   /* 蹲蹲 heat */
+
+  /* ---- type ---- */
+  --f-display: 'Space Grotesk', -apple-system, system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --f-serif:   'Fraunces', Georgia, 'Songti SC', serif;
+  --f-mono:    'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
+
+  --fs-hero:  clamp(3rem, 11vw, 9rem);
+  --fs-h1:    clamp(2.2rem, 6vw, 4.5rem);
+  --fs-h2:    clamp(1.6rem, 4vw, 3rem);
+  --fs-h3:    clamp(1.2rem, 2.4vw, 1.8rem);
+  --fs-body:  clamp(1rem, 1.25vw, 1.15rem);
+  --fs-small: .82rem;
+  --fs-mono:  .72rem;
+
+  --lh-tight: 1.05;
+  --lh:       1.55;
+  --track:    -0.01em;
+  --track-mono: .16em;
+
+  /* ---- spacing scale ---- */
+  --sp-1:.5rem; --sp-2:1rem; --sp-3:1.5rem; --sp-4:2.5rem;
+  --sp-5:4rem;  --sp-6:6.5rem; --sp-7:10rem;
+  --maxw:1200px; --readw:64ch;
+  --radius:14px; --radius-sm:8px; --radius-pill:999px;
+
+  /* ---- motion ---- */
+  --e-out:   cubic-bezier(.22,1,.36,1);
+  --e-inout: cubic-bezier(.76,0,.24,1);
+  --e-expo:  cubic-bezier(.16,1,.3,1);
+  --d-fast:.25s; --d:.5s; --d-slow:.9s;
+
+  /* ---- glow / shadow ---- */
+  --glow-zima: 0 0 28px rgba(31,162,214,.55);
+  --glow-soft: 0 0 18px rgba(31,162,214,.35);
+  --shadow-1:  0 18px 50px rgba(0,0,0,.45);
+
+  /* ---- z-index layers ---- */
+  --z-bg:-2; --z-mid:1; --z-content:5; --z-nav:50; --z-overlay:90; --z-preload:100;
+}

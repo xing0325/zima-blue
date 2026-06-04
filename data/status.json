@@ -1,0 +1,7 @@
+{
+  "_note": "在线状态 + 今日 Claude 数据。本地 daemon 每 1-2 分钟覆盖一次；daemon 未运行时前端按 lastSeen 判定为离线。",
+  "online": false,
+  "lastSeen": null,
+  "today": { "date": "2026-06-05", "tokens": 0, "sessionMinutes": 0, "commits": 0 },
+  "streakDays": 0
+}

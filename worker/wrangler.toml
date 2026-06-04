@@ -1,0 +1,22 @@
+name = "zima-api"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+# 1) create the KV namespace:
+#      npx wrangler kv namespace create ZIMA
+#    paste the returned id below.
+[[kv_namespaces]]
+binding = "ZIMA"
+id = "REPLACE_WITH_KV_ID"
+
+[vars]
+# tighten to your site origin once deployed, e.g. "https://xing0325.github.io"
+ALLOW_ORIGIN = "*"
+
+# 2) set the heartbeat secret (NOT stored here):
+#      npx wrangler secret put HEARTBEAT_SECRET
+#    use the same value as the daemon's ZIMA_SECRET.
+
+# 3) deploy:
+#      npx wrangler deploy
+#    then put the printed URL into js/lib/config.js  (apiBase) and the daemon's ZIMA_API.

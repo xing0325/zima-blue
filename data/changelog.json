@@ -1,0 +1,26 @@
+{
+  "_note": "更新日志。本地 daemon 会在每天凌晨 2 点(北京时间)把当天 git 提交 + Claude 活动汇总后 prepend 到 entries 顶部。",
+  "generatedAt": "2026-06-05T02:00:00+08:00",
+  "entries": [
+    {
+      "date": "2026-06-05",
+      "title": "网站起步",
+      "items": [
+        "和 Claude 从零设计齐马蓝主题个人站",
+        "定下『深空 + 瓷砖网格』视觉与『下潜』叙事",
+        "做出 Hero→关于 的俯冲转场（缩小 + 蓝色绽放 + 手写签名）"
+      ],
+      "tokens": null,
+      "sessionMinutes": null,
+      "commits": 0
+    },
+    {
+      "date": "2026-06-04",
+      "title": "Sessions 并行 skill 迭代",
+      "items": ["调试多 session 合流", "修了并行时的状态串扰"],
+      "tokens": null,
+      "sessionMinutes": null,
+      "commits": 3
+    }
+  ]
+}

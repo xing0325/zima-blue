@@ -1,0 +1,6 @@
+[
+  { "id": "sessions",          "title": "Sessions 多开并行",     "blurb": "写了个 skill，把一个大项目拆给多个 Claude session 同时推进，再自动合流。", "status": "in-use",  "issueUrl": "" },
+  { "id": "xhs-preview",       "title": "小红书预览工作台",       "blurb": "边写边所见即所得地预览小红书图文，省去反复导出对版。",                 "status": "in-use",  "issueUrl": "" },
+  { "id": "repo-marketer",     "title": "GitHub 仓库营销器",      "blurb": "一键给仓库生成 README 物料、封面图和推广文案。",                       "status": "in-use",  "issueUrl": "" },
+  { "id": "cardputer-preview", "title": "Cardputer 预览工作台",   "blurb": "给 M5 Cardputer 做的预览台，写完直接看设备上的样子。",                 "status": "planned", "issueUrl": "" }
+]
