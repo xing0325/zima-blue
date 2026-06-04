@@ -49,6 +49,7 @@ function readClaudeUsage() {
   const t = today();
   const sessions = new Set();
   let minTs = Infinity, maxTs = -Infinity;
+  const sod = new Date(); sod.setHours(0, 0, 0, 0); const startOfDayMs = sod.getTime(); // skip files not touched today
 
   const scan = (fp) => {
     let txt; try { txt = fs.readFileSync(fp, 'utf8'); } catch { return; }
@@ -70,7 +71,7 @@ function readClaudeUsage() {
     for (const e of ents) {
       const fp = path.join(dir, e.name);
       if (e.isDirectory()) walk(fp);
-      else if (e.name.endsWith('.jsonl')) scan(fp);
+      else if (e.name.endsWith('.jsonl')) { try { if (fs.statSync(fp).mtimeMs >= startOfDayMs) scan(fp); } catch {} }
     }
   };
   walk(root);
