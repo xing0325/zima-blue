@@ -78,22 +78,20 @@
   opacity:.7; mix-blend-mode:screen; }
 .cosmos .starfield{ position:absolute; inset:0; width:100%; height:100%; display:block; }
 
-/* the glowing pool (scoped to #hero-about so it never collides with #contact .pool) */
-#hero-about .pool{ position:absolute; inset:0; z-index:2; transform-origin:50% 58%; }
+/* the pool from the bottom (池底视角) — scoped to #hero-about so it never collides
+   with #contact .pool */
+#hero-about .pool{ position:absolute; inset:0; z-index:2; transform-origin:54% 12%; }
 #hero-about .pool-svg{ position:absolute; inset:0; width:100%; height:100%; display:block; }
-#hero-about .pool-svg .tiles{ filter:drop-shadow(0 0 9px rgba(39,194,242,.5)); }
-#hero-about .water{ position:absolute; inset:0; width:100%; height:100%; z-index:3; pointer-events:none; mix-blend-mode:screen; }
-#hero-about .water-glow{ position:absolute; top:0; left:0; width:340px; height:340px; z-index:3; pointer-events:none;
-  border-radius:50%; mix-blend-mode:screen;
-  background:radial-gradient(circle, rgba(39,194,242,.16) 0%, rgba(39,194,242,.05) 40%, transparent 70%); }
-#hero-about .pool-vignette{ position:absolute; inset:0; z-index:4; pointer-events:none;
+#hero-about .pool-svg .wall-caustic{ mix-blend-mode:screen; opacity:.5; }
+#hero-about .caustics{ position:absolute; inset:0; width:100%; height:100%; z-index:3; pointer-events:none; mix-blend-mode:screen; }
+#hero-about .uw-vignette{ position:absolute; inset:0; z-index:4; pointer-events:none;
   background:
-    radial-gradient(120% 110% at 50% 46%, transparent 52%, rgba(2,6,8,.66) 100%),
-    linear-gradient(180deg, rgba(2,6,8,.5) 0%, transparent 16%, transparent 86%, rgba(2,6,8,.55) 100%); }
+    radial-gradient(130% 92% at 55% 6%, transparent 38%, rgba(5,30,34,.5) 100%),
+    linear-gradient(180deg, rgba(5,28,32,.42) 0%, transparent 14%, transparent 78%, rgba(4,20,24,.74) 100%); }
 
 /* poolside copy (flat overlay) */
-.hero-copy{ position:absolute; z-index:5; left:0; right:0; top:14%; display:flex; flex-direction:column; align-items:center; gap:1.1rem; text-align:center; pointer-events:none;
-  text-shadow:0 2px 26px rgba(2,8,14,.7); }
+.hero-copy{ position:absolute; z-index:5; left:0; right:0; top:19%; display:flex; flex-direction:column; align-items:center; gap:1.1rem; text-align:center; pointer-events:none;
+  text-shadow:0 2px 30px rgba(2,22,26,.9), 0 0 3px rgba(2,22,26,.55); }
 .void-dot{ width:13px; height:13px; border-radius:50%; background:var(--zima); box-shadow:0 0 26px 9px rgba(59,179,224,.7); }
 .void-mark{ font-weight:300; font-size:var(--fs-hero); letter-spacing:-.035em; line-height:.9; }
 .void-tag{ color:var(--ink-soft); }

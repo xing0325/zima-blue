@@ -1,9 +1,9 @@
-// heroAbout.js — Hero = the glowing pool. A crude rail-riding robot lays glowing
-// tiles along the wall (faithful to 安装瓷砖过程): pick → swing down → press → retract
-// → advance, on an endless treadmill so the lit band always grows under it. The mouse
-// disturbs the water (a lagging glow + expanding rings); a ripple near the robot startles
-// it. Scrolling DIVES through the water into the cosmos; the signature draws then
-// dissolves before About lands.  Grounded in docs/reference-artbook.md.
+// heroAbout.js — Hero = the pool seen from the BOTTOM (池底视角, ref 池底视角5):
+// the surface glows far above, caustic light dances on a tilted tiled wall, and the
+// little machine endlessly scrubs that wall (with its reflection on it). The mouse
+// disturbs the water (ripples) and startles the robot. Scrolling FLOATS up to the
+// surface and breaks through into the cosmos; the signature draws, then dissolves
+// before About.  Grounded in docs/reference-artbook.md §2.5.
 import { maskLines } from './lib/util.js';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -12,8 +12,15 @@ function S(tag, attrs) {
   for (const k in attrs) e.setAttribute(k, attrs[k]);
   return e;
 }
+const lerp = (a, b, t) => a + (b - a) * t;
+function mix(c1, c2, t) {
+  const p = (h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+  const a = p(c1), b = p(c2);
+  const h = (n) => Math.round(n).toString(16).padStart(2, '0');
+  return '#' + h(lerp(a[0], b[0], t)) + h(lerp(a[1], b[1], t)) + h(lerp(a[2], b[2], t));
+}
 
-// ----- starfield (deep navy, colourful, gently twinkling) -----
+// ----- starfield (revealed once we break the surface) -----
 function buildStarfield(canvas, host, reduce) {
   const c = canvas.getContext('2d');
   let W = 0, H = 0, dpr = 1, stars = [];
@@ -26,31 +33,24 @@ function buildStarfield(canvas, host, reduce) {
     c.setTransform(dpr, 0, 0, dpr, 0, 0);
     stars = [];
     const n = Math.round(Math.min(260, (W * H) / 7000));
-    for (let i = 0; i < n; i++) {
-      stars.push({
-        x: Math.random() * W, y: Math.random() * H,
-        r: 0.4 + Math.random() * 1.6,
-        col: COLORS[(Math.random() * COLORS.length) | 0],
-        base: 0.25 + Math.random() * 0.6,
-        tw: 0.3 + Math.random() * 1.4, ph: Math.random() * 6.28,
-      });
-    }
+    for (let i = 0; i < n; i++) stars.push({
+      x: Math.random() * W, y: Math.random() * H, r: 0.4 + Math.random() * 1.6,
+      col: COLORS[(Math.random() * COLORS.length) | 0], base: 0.25 + Math.random() * 0.6,
+      tw: 0.3 + Math.random() * 1.4, ph: Math.random() * 6.28,
+    });
   }
   resize(); window.addEventListener('resize', resize);
   let raf = 0;
-  function draw(t) {
+  (function draw(t) {
     c.clearRect(0, 0, W, H);
     const k = t * 0.001;
     for (const s of stars) {
-      const a = reduce ? s.base : s.base * (0.55 + 0.45 * Math.sin(k * s.tw + s.ph));
-      c.globalAlpha = Math.max(0, a);
-      c.fillStyle = s.col;
-      c.beginPath(); c.arc(s.x, s.y, s.r, 0, 6.283); c.fill();
+      c.globalAlpha = Math.max(0, reduce ? s.base : s.base * (0.55 + 0.45 * Math.sin(k * s.tw + s.ph)));
+      c.fillStyle = s.col; c.beginPath(); c.arc(s.x, s.y, s.r, 0, 6.283); c.fill();
     }
     c.globalAlpha = 1;
     if (!reduce) raf = requestAnimationFrame(draw);
-  }
-  draw(0);
+  })(0);
   return { stop() { cancelAnimationFrame(raf); } };
 }
 
@@ -59,13 +59,13 @@ export function initHeroAbout(ctx) {
   const stage = document.getElementById('hero-about');
   if (!stage) return;
 
-  const band = stage.querySelector('[data-band]');
-  const tilesG = stage.querySelector('[data-tiles]');
-  const botG = stage.querySelector('[data-bot]');
-  const towersG = stage.querySelector('[data-towers]');
   const pool = stage.querySelector('[data-pool]');
-  const water = stage.querySelector('[data-water]');
-  const glow = stage.querySelector('[data-glow]');
+  const wallG = stage.querySelector('[data-wall]');
+  const raysG = stage.querySelector('[data-rays]');
+  const botG = stage.querySelector('[data-bot]');
+  const botRefG = stage.querySelector('[data-bot-ref]');
+  const turb = stage.querySelector('[data-turb]');
+  const caustics = stage.querySelector('[data-caustics]');
   const cosmos = stage.querySelector('[data-cosmos]');
   const starsCv = stage.querySelector('[data-stars]');
   const heroCopy = stage.querySelector('[data-hero-copy]');
@@ -75,155 +75,136 @@ export function initHeroAbout(ctx) {
   const sigFlo = stage.querySelector('.sig-flourish');
   const resolve = stage.querySelector('[data-scene="resolve"]');
 
-  // ---- bio copy ----
+  // ---- bio ----
   const p = ctx.data && ctx.data.profile;
   const lead = stage.querySelector('[data-bio-lead]');
   if (lead && p && p.bioLead) lead.textContent = p.bioLead;
   const bioHost = stage.querySelector('[data-bio]');
   const lineEls = (bioHost && p && p.bio) ? maskLines(bioHost, p.bio) : [];
 
-  // ---- signature dash setup ----
+  // ---- signature dash ----
   const dash = (path) => { if (!path) return; const L = path.getTotalLength(); path.style.strokeDasharray = L; path.style.strokeDashoffset = L; };
   dash(sigMain); dash(sigFlo);
 
-  // ---- distant industrial skyline ----
-  if (towersG) {
-    const T = [[760, 70, 26, 168], [800, 96, 14, 142], [928, 40, 30, 198], [968, 86, 12, 152], [690, 120, 18, 118]];
-    for (const t of T) towersG.appendChild(S('rect', { x: t[0], y: t[1], width: t[2], height: t[3], fill: '#05080A', opacity: 0.92 }));
-    towersG.appendChild(S('path', { d: 'M734 60 L734 250 M758 60 L758 250 M734 96 L758 120 M758 96 L734 120 M734 150 L758 174 M758 150 L734 174', stroke: '#05080A', 'stroke-width': 4, fill: 'none', opacity: 0.9 }));
-  }
-
-  // ===================== the tile band (endless treadmill) =====================
-  const TILE_W = 44, TILE_H = 96, GAP = 6, PITCH = TILE_W + GAP; // 50
-  const COUNT = 32;
-  const ROBOT_LX = 520;          // robot's fixed local-x on the rail
-  const SPAN = COUNT * PITCH;
-  const tiles = [];
-  let offset = 0;                // band scroll offset (<= 0); group.x = offset
-
-  if (tilesG) {
-    for (let i = 0; i < COUNT; i++) {
-      const g = S('g', { transform: `translate(${i * PITCH},0)` });
-      g.appendChild(S('rect', { x: 0, y: 0, width: TILE_W, height: TILE_H, rx: 1, fill: '#0c1a22' }));
-      const lit = S('rect', { x: 0, y: 0, width: TILE_W, height: TILE_H, rx: 1, fill: 'url(#hero-tile)', opacity: 0 });
-      g.appendChild(lit);
-      if (i % 3 === 0) g.appendChild(S('path', { d: `M${TILE_W * 0.5} 8 L${TILE_W * 0.64} ${TILE_H * 0.42} L${TILE_W * 0.4} ${TILE_H * 0.6} L${TILE_W * 0.56} ${TILE_H - 8}`, stroke: '#0A2A33', 'stroke-width': 1, fill: 'none', opacity: 0.5 }));
-      tilesG.appendChild(g);
-      tiles.push({ g, lit, x: i * PITCH, on: false });
-    }
-  }
-  function lightTile(t, instant) {
-    if (!t) return; t.on = true;
-    if (instant || !gsap) { t.lit.setAttribute('opacity', 1); return; }
-    gsap.fromTo(t.lit, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power3.out' });
-  }
-  // already-tiled left half
-  tiles.forEach((t) => { if (t.x < ROBOT_LX) lightTile(t, true); });
-
-  function seatFrontier() {
-    let best = null, bd = 1e9;
-    for (const t of tiles) {
-      if (t.on) continue;
-      const sx = t.x + offset;
-      const d = Math.abs(sx - ROBOT_LX);
-      if (sx >= ROBOT_LX - PITCH * 0.6 && d < bd) { bd = d; best = t; }
-    }
-    lightTile(best, false);
-  }
-  function recycle() {
-    for (const t of tiles) {
-      if (t.x + offset < -PITCH * 2) {
-        t.x += SPAN; t.on = false;
-        t.g.setAttribute('transform', `translate(${t.x},0)`);
-        t.lit.setAttribute('opacity', 0);
+  // ===================== the tiled wall =====================
+  // wall-local coords: y=0 is the coping (near the surface, bright); +y goes deep (dark).
+  const PITCH = 64, GAP = 4, TS = PITCH - GAP;
+  if (wallG) {
+    wallG.appendChild(S('rect', { x: -640, y: -8, width: 1560, height: 1200, fill: '#0c343a' })); // grout substrate
+    for (let gy = 0; gy < 19; gy++) {
+      const t = Math.min(1, gy / 17);
+      for (let gx = -10; gx < 15; gx++) {
+        const shade = mix('#4FB6CE', '#0E363E', t * 0.92 + (Math.random() * 0.12 - 0.06));
+        wallG.appendChild(S('rect', { x: gx * PITCH, y: gy * PITCH, width: TS, height: TS, fill: shade, opacity: lerp(0.96, 0.66, t) }));
       }
     }
   }
 
-  // ===================== the robot =====================
-  // botG is translated to (ROBOT_LX,0) in band space; an inner group takes the flinch
-  // scale; the arm pivots about its bbox top-centre (the shoulder).
-  let armEl = null, heldEl = null, lensEl = null, botInner = null;
-  if (botG) {
-    botG.setAttribute('transform', `translate(${ROBOT_LX},0)`);
-    botInner = S('g', { 'data-bot-inner': '' });
-    // faint zima rim so the dark silhouette always reads against the dark water
-    botInner.appendChild(S('polygon', { points: '-48,-162 42,-162 54,-130 32,-118 -42,-118 -56,-134', fill: '#0E1418', stroke: '#1FA8E0', 'stroke-width': 1.4, 'stroke-opacity': 0.55 }));
-    botInner.appendChild(S('rect', { x: -12, y: -150, width: 24, height: 13, fill: '#05090c' }));
-    const lensWrap = S('g', { 'data-bot-lens': '' });
-    lensWrap.appendChild(S('circle', { cx: 14, cy: -140, r: 6, fill: '#04070d' }));
-    lensWrap.appendChild(S('circle', { cx: 14, cy: -140, r: 3, fill: '#27C2F2' }));
-    lensWrap.appendChild(S('circle', { cx: 15.4, cy: -141.4, r: 1, fill: '#fff' }));
-    botInner.appendChild(S('path', { d: 'M-34,-132 C-46,-102 -40,-72 -16,-56', stroke: '#05090c', 'stroke-width': 2.6, fill: 'none', opacity: 0.85 }));
-    botInner.appendChild(S('circle', { cx: 0, cy: -112, r: 12, fill: '#0a1015', stroke: '#05090c', 'stroke-width': 3 }));
-    const mount = S('g', { transform: 'translate(0,-112)' });
-    armEl = S('g', { 'data-arm': '' });
-    armEl.appendChild(S('polygon', { points: '-7,0 7,0 8,52 -8,52', fill: '#0e1620' }));      // upper
-    armEl.appendChild(S('polygon', { points: '-8,52 8,52 7,104 -7,104', fill: '#101a24' }));   // forearm
-    const tray = S('g', { 'data-tray': '' });
-    tray.appendChild(S('path', { d: 'M-16,104 L16,104 L16,110 L-16,110 Z', fill: '#0a1218' }));
-    heldEl = S('rect', { x: -16, y: 108, width: TILE_W * 0.72, height: TILE_H * 0.42, rx: 1, fill: 'url(#hero-tile)', opacity: 0, 'data-held': '' });
-    tray.appendChild(heldEl);
-    armEl.appendChild(tray);
-    mount.appendChild(armEl);
-    botInner.appendChild(mount);
-    botInner.appendChild(lensWrap);
-    botG.appendChild(botInner);
-    lensEl = lensWrap;
+  // ===================== god-rays =====================
+  if (raysG) {
+    const apex = { x: 660, y: -90 };
+    for (let i = 0; i < 6; i++) {
+      const a = -0.5 + i * 0.2 + (Math.random() * 0.06);
+      const len = 760, half = 26 + Math.random() * 26;
+      const tipx = apex.x + Math.sin(a) * len, tipy = apex.y + Math.cos(a) * len;
+      const px = Math.cos(a) * half, py = -Math.sin(a) * half;
+      const ray = S('polygon', { points: `${apex.x - px},${apex.y - py} ${apex.x + px},${apex.y + py} ${tipx + px * 1.8},${tipy + py * 1.8} ${tipx - px * 1.8},${tipy - py * 1.8}`, fill: '#CFF3EC', opacity: 0.08 + Math.random() * 0.07 });
+      ray.setAttribute('data-ray', '');
+      raysG.appendChild(ray);
+    }
+    raysG.style.mixBlendMode = 'screen';
   }
 
-  // ===================== mouse disturbs the water =====================
-  if (water && !reduce) {
-    const c = water.getContext('2d');
-    let W = 0, H = 0, dpr = 1, rings = [];
+  // ===================== the robot (scrubbing the wall) + reflection =====================
+  const BOT_X = 210, BOT_Y = 120;
+  let armEl = null, brushEl = null, lensEl = null, botInner = null;
+  function botShape(parent, ghost) {
+    const inner = S('g', ghost ? {} : { 'data-bot-inner': '' });
+    const col = ghost ? '#0a2a30' : '#08130f';
+    inner.appendChild(S('rect', { x: -34, y: 22, width: 68, height: 9, rx: 3, fill: col }));        // tread bar
+    for (const cx of [-24, -2, 20]) inner.appendChild(S('circle', { cx, cy: 30, r: 7, fill: ghost ? '#0c3038' : '#0a1614' }));
+    inner.appendChild(S('polygon', { points: '-36,-8 -22,-30 26,-30 42,-4 34,24 -32,24', fill: col, stroke: ghost ? 'none' : '#3FB8B0', 'stroke-width': 1.2, 'stroke-opacity': 0.5 })); // body
+    inner.appendChild(S('rect', { x: 8, y: -28, width: 16, height: 11, rx: 2, fill: ghost ? '#0a2a30' : '#05100e' })); // sensor housing
+    const lens = S('g', ghost ? {} : { 'data-bot-lens': '' });
+    lens.appendChild(S('circle', { cx: 16, cy: -22, r: 3.4, fill: ghost ? '#1c5a60' : '#7FD9CF' }));
+    // arm reaching up the wall (toward -y / the coping), with a scrubbing brush
+    const arm = S('g', ghost ? {} : { 'data-arm': '' });
+    arm.appendChild(S('polygon', { points: '-20,-18 -12,-22 -40,-64 -50,-58', fill: ghost ? '#0c3038' : '#0a1614' }));
+    const brush = S('g', ghost ? {} : { 'data-brush': '' });
+    brush.appendChild(S('rect', { x: -58, y: -72, width: 24, height: 8, rx: 2, fill: col }));
+    brush.appendChild(S('path', { d: 'M-54,-64 l0,6 M-48,-64 l0,6 M-42,-64 l0,6 M-38,-64 l0,6', stroke: ghost ? '#0c3038' : '#0a1614', 'stroke-width': 1.6 }));
+    arm.appendChild(brush);
+    inner.appendChild(arm); inner.appendChild(lens);
+    parent.appendChild(inner);
+    return { inner, arm, brush, lens };
+  }
+  if (botRefG) {
+    botRefG.setAttribute('transform', `translate(${BOT_X + 14},${BOT_Y + 168}) scale(1,-0.86)`);
+    botRefG.setAttribute('opacity', '0.16');
+    botShape(botRefG, true);
+  }
+  if (botG) {
+    botG.setAttribute('transform', `translate(${BOT_X},${BOT_Y})`);
+    const r = botShape(botG, false);
+    botInner = r.inner; armEl = r.arm; brushEl = r.brush; lensEl = r.lens;
+  }
+
+  // ===================== caustics canvas: bubbles + mouse ripples =====================
+  if (caustics && !reduce) {
+    const c = caustics.getContext('2d');
+    let W = 0, H = 0, dpr = 1; const rings = [], bubbles = [];
     const resize = () => {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       W = stage.clientWidth; H = stage.clientHeight;
-      water.width = W * dpr; water.height = H * dpr;
-      water.style.width = W + 'px'; water.style.height = H + 'px';
+      caustics.width = W * dpr; caustics.height = H * dpr;
+      caustics.style.width = W + 'px'; caustics.style.height = H + 'px';
       c.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize(); window.addEventListener('resize', resize);
-    const spawn = (x, y, strong) => rings.push({ x, y, r: 3, max: strong ? 170 : 70 + Math.random() * 60, w: strong ? 2.4 : 1.2 });
-    let amb = 0;
+    const ring = (x, y, strong) => rings.push({ x, y, r: 3, max: strong ? 150 : 64 + Math.random() * 54, w: strong ? 2.3 : 1.1 });
+    const botCenter = () => { const b = botG.getBoundingClientRect(); return { x: b.left + b.width / 2, y: b.top + b.height / 2 }; };
+    let bub = 0;
     (function loop(t) {
       c.clearRect(0, 0, W, H);
-      if (t - amb > 2400) { amb = t; spawn(Math.random() * W, H * (0.45 + Math.random() * 0.45)); }
+      // bubbles rise from the robot
+      if (t - bub > 360) { bub = t; const p0 = botCenter(); bubbles.push({ x: p0.x + (Math.random() * 26 - 13), y: p0.y, r: 1.4 + Math.random() * 3.4, vy: 0.5 + Math.random() * 0.7, ph: Math.random() * 6.28, life: 1 }); }
+      for (let i = bubbles.length - 1; i >= 0; i--) {
+        const b = bubbles[i]; b.y -= b.vy; b.x += Math.sin((H - b.y) * 0.03 + b.ph) * 0.5; b.life = b.y / H;
+        c.beginPath(); c.arc(b.x, b.y, b.r, 0, 6.283);
+        c.strokeStyle = `rgba(207,243,236,${0.5 * b.life})`; c.lineWidth = 1; c.stroke();
+        if (b.y < H * 0.08) bubbles.splice(i, 1);
+      }
+      // ripples
       for (let i = rings.length - 1; i >= 0; i--) {
         const rp = rings[i]; rp.r += 1.5; const a = Math.max(0, 1 - rp.r / rp.max);
         c.beginPath(); c.arc(rp.x, rp.y, rp.r, 0, 6.283);
-        c.strokeStyle = `rgba(90,200,224,${a * 0.4})`; c.lineWidth = rp.w; c.stroke();
+        c.strokeStyle = `rgba(127,217,207,${a * 0.45})`; c.lineWidth = rp.w; c.stroke();
         if (a <= 0) rings.splice(i, 1);
       }
       requestAnimationFrame(loop);
     })(0);
 
-    const glowX = glow ? gsap.quickTo(glow, 'x', { duration: 0.6, ease: 'power3' }) : null;
-    const glowY = glow ? gsap.quickTo(glow, 'y', { duration: 0.6, ease: 'power3' }) : null;
-    if (glow) gsap.set(glow, { xPercent: -50, yPercent: -50, x: -300, y: -300 });
     let lastSpawn = 0, lastStartle = 0;
     function startle() {
       if (!gsap) return;
-      if (botInner) gsap.to(botInner, { keyframes: [{ scale: 1.1, duration: 0.12, ease: 'power2.out' }, { scale: 1, duration: 0.6, ease: 'elastic.out(1,0.4)' }], transformOrigin: '50% 100%' });
-      if (lensEl) gsap.to(lensEl, { keyframes: [{ scale: 1.5, duration: 0.12 }, { scale: 1, duration: 0.45, ease: 'power2.out' }], transformOrigin: '50% 50%' });
+      if (botInner) gsap.to(botInner, { keyframes: [{ scale: 1.12, duration: 0.12, ease: 'power2.out' }, { scale: 1, duration: 0.6, ease: 'elastic.out(1,0.4)' }], transformOrigin: '50% 80%' });
+      if (lensEl) gsap.to(lensEl, { keyframes: [{ scale: 1.6, duration: 0.12 }, { scale: 1, duration: 0.45, ease: 'power2.out' }], transformOrigin: '50% 50%' });
     }
     stage.addEventListener('pointermove', (e) => {
       const t = e.timeStamp || 0;
-      if (glowX) { glowX(e.clientX); glowY(e.clientY); }
-      if (t - lastSpawn > 50) { lastSpawn = t; spawn(e.clientX, e.clientY); }
+      if (t - lastSpawn > 48) { lastSpawn = t; ring(e.clientX, e.clientY); }
       if (botG) {
-        const r = botG.getBoundingClientRect();
-        const d = Math.hypot(e.clientX - (r.left + r.width / 2), e.clientY - (r.top + r.height / 2));
-        if (d < 150 && t - lastStartle > 1700) { lastStartle = t; startle(); spawn(e.clientX, e.clientY, true); }
+        const p0 = botCenter();
+        if (Math.hypot(e.clientX - p0.x, e.clientY - p0.y) < 150 && t - lastStartle > 1600) { lastStartle = t; startle(); ring(e.clientX, e.clientY, true); }
       }
     });
+    caustics.style.mixBlendMode = 'screen';
   }
 
   // ===================== starfield =====================
   if (starsCv) { try { buildStarfield(starsCv, stage, reduce); } catch (e) { /* non-fatal */ } }
 
   // ===================== reduced-motion / no-gsap fallback =====================
-  // Never cover the pool with the cosmos here — show the glowing pool as the hero.
   if (reduce || !gsap || !ScrollTrigger) {
     if (cosmos) cosmos.style.opacity = 0;
     if (pool) pool.style.opacity = 1;
@@ -232,23 +213,13 @@ export function initHeroAbout(ctx) {
     return;
   }
 
-  // ===================== the arm-motion cycle (endless) =====================
-  if (armEl) {
-    gsap.set(armEl, { transformOrigin: '50% 0%', rotation: -14 });
-    const armTL = gsap.timeline({ repeat: -1 });
-    armTL
-      .to({}, { duration: 0.4 })                                                   // 1 REST
-      .to(heldEl, { opacity: 1, duration: 0.3, ease: 'power1.in' })                // 2 PICK
-      .to(armEl, { rotation: 30, duration: 0.5, ease: 'power2.inOut' })            // 3 SWING DOWN/OUT
-      .to(armEl, { rotation: 34, duration: 0.1, yoyo: true, repeat: 1, ease: 'power1.out' }) // overshoot
-      .add(seatFrontier)                                                            // 4 PRESS — light the wall tile
-      .to(heldEl, { opacity: 0, duration: 0.18 }, '>-0.04')                        // 5 RELEASE
-      .to(armEl, { rotation: -14, duration: 0.5, ease: 'power2.inOut' })           //   RETRACT
-      .to(tilesG, { x: () => offset - PITCH, duration: 0.45, ease: 'power1.inOut', // 6 ADVANCE (band scrolls)
-        onComplete() { offset -= PITCH; recycle(); } });
-  }
+  // ===================== ambient life: caustics shimmer, god-rays, scrub =====================
+  if (turb) gsap.to(turb, { attr: { baseFrequency: '0.015 0.032' }, duration: 9, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+  if (raysG) gsap.to(raysG.querySelectorAll('[data-ray]'), { opacity: '+=0.05', duration: 'random(4,7)', yoyo: true, repeat: -1, ease: 'sine.inOut', stagger: { each: 0.6, from: 'random' } });
+  if (armEl) gsap.to(armEl, { rotation: 9, duration: 0.85, yoyo: true, repeat: -1, ease: 'sine.inOut', transformOrigin: '50% 100%' });
+  if (brushEl) gsap.to(brushEl, { x: 5, duration: 0.85, yoyo: true, repeat: -1, ease: 'sine.inOut' });
 
-  // ===================== the DIVE (pinned, scrubbed) → cosmos =====================
+  // ===================== float to the surface (pinned, scrubbed) → cosmos =====================
   gsap.set(cosmos, { opacity: 0 });
   gsap.set([lead, ...lineEls].filter(Boolean), { opacity: 0, yPercent: 60 });
 
@@ -256,13 +227,13 @@ export function initHeroAbout(ctx) {
     scrollTrigger: { trigger: stage, start: 'top top', end: '+=3000', pin: true, scrub: 1, anticipatePin: 1, invalidateOnRefresh: true },
     defaults: { ease: 'none' },
   });
-  tl.to(pool, { scale: 1.22, yPercent: 16, opacity: 0, duration: 1 }, 0)            // sink past the water
+  tl.to(pool, { scale: 1.7, yPercent: -10, opacity: 0, duration: 1 }, 0)          // rise & break the surface
     .to(heroCopy, { opacity: 0, yPercent: -14, ease: 'power2.in', duration: 0.45 }, 0)
     .to(cue, { opacity: 0, duration: 0.16 }, 0)
-    .fromTo(cosmos, { opacity: 0.25, scale: 1.2 }, { opacity: 1, scale: 1, duration: 1 }, 0)
+    .fromTo(cosmos, { opacity: 0.2, scale: 1.18 }, { opacity: 1, scale: 1, duration: 1 }, 0)
     .to(sigMain, { strokeDashoffset: 0, duration: 0.62 }, 0)
     .to(sigFlo, { strokeDashoffset: 0, duration: 0.62 }, 0)
-    .to(sigLayer, { autoAlpha: 0, duration: 0.16 }, 0.74)                            // signature dissolves
+    .to(sigLayer, { autoAlpha: 0, duration: 0.16 }, 0.74)
     .to(lead, { opacity: 1, yPercent: 0, ease: 'power3.out', duration: 0.4 }, 0.82)
     .to(lineEls, { opacity: 1, yPercent: 0, ease: 'power3.out', stagger: 0.1, duration: 0.5 }, 0.9);
 
