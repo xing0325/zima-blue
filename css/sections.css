@@ -219,3 +219,22 @@
 .cursor-ring.is-grow{ width:58px; height:58px; margin:-29px; background:rgba(31,162,214,.14); }
 .cursor-ring.is-press{ width:26px; height:26px; margin:-13px; }
 @media (pointer:coarse){ .cursor-dot,.cursor-ring{ display:none; } }
+
+/* ===================== 齐马的画作 interludes ===================== */
+.painting{ position:relative; min-height:100vh; display:grid; place-items:center; overflow:hidden;
+  background:radial-gradient(120% 120% at 50% 42%,#08131f 0%,#04070d 68%,#02040a 100%); }
+.art-stars{ position:absolute; inset:-25%; will-change:transform; }
+.art-stars i{ position:absolute; display:block; border-radius:50%; background:#cfeaff; }
+.art-square{ width:78vmin; height:78vmin; transform:scale(.08); transform-origin:center; border-radius:2px;
+  background:linear-gradient(145deg,#36c0ef,#1FA2D6 55%,#1583b8);
+  box-shadow:0 0 90px rgba(31,162,214,.45); will-change:transform; }
+.art-plaque{ position:absolute; bottom:9%; left:50%; transform:translateX(-50%); width:min(62ch,86vw); text-align:center; }
+.art-cap{ color:var(--ink-soft); font-size:clamp(1rem,2.1vw,1.4rem); line-height:1.6; margin-top:.5rem; font-weight:300; }
+
+/* ===================== pool floor + tile-laying robot ===================== */
+.pool-floor{ position:absolute; left:0; right:0; bottom:0; height:120px; z-index:1; pointer-events:none; }
+.pool-floor .tiles{ position:absolute; left:0; right:0; bottom:0; height:40px; display:flex; gap:3px; padding:0 4%; }
+.floor-tile{ flex:1; border-radius:3px; background:rgba(127,180,220,.08); border:1px solid rgba(127,180,220,.12);
+  transition:background .4s var(--e-out), box-shadow .4s, border-color .4s; }
+.floor-tile.laid{ background:linear-gradient(145deg,#36c0ef,#1FA2D6); border-color:transparent; box-shadow:0 0 14px rgba(31,162,214,.5); }
+.bot{ position:absolute; bottom:38px; left:4%; width:44px; height:auto; filter:drop-shadow(0 4px 10px rgba(0,0,0,.4)); }
