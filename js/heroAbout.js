@@ -61,6 +61,7 @@ export function initHeroAbout(ctx) {
 
   const pool = stage.querySelector('[data-pool]');
   const wallG = stage.querySelector('[data-wall]');
+  const layG = stage.querySelector('[data-lay]');
   const raysG = stage.querySelector('[data-rays]');
   const botG = stage.querySelector('[data-bot]');
   const botRefG = stage.querySelector('[data-bot-ref]');
@@ -100,6 +101,37 @@ export function initHeroAbout(ctx) {
     }
   }
 
+  // ===================== the fresh-tile lay strip (what the clamp builds) =====================
+  // wall-local: a row of slots near the coping; the clamp lights one per cycle, bright zima
+  // tiles against the old teal wall, on an endless treadmill so the band always grows.
+  const LAY_PITCH = 60, LAY_TS = 54, LAY_Y = 30, LAY_COUNT = 30, CLAMP_X = 150;
+  const laySpan = LAY_COUNT * LAY_PITCH;
+  const slots = [];
+  let layOffset = 0;
+  if (layG) {
+    for (let i = 0; i < LAY_COUNT; i++) {
+      const g = S('g', { transform: `translate(${i * LAY_PITCH},0)` });
+      const lit = S('rect', { x: 0, y: LAY_Y, width: LAY_TS, height: LAY_TS, rx: 1, fill: 'url(#uw-fresh)', opacity: 0 });
+      g.appendChild(lit); layG.appendChild(g);
+      slots.push({ g, lit, x: i * LAY_PITCH, on: false });
+    }
+    slots.forEach((s) => { if (s.x < CLAMP_X) { s.on = true; s.lit.setAttribute('opacity', 1); } });
+  }
+  function seatFrontier() {
+    let best = null, bd = 1e9;
+    for (const s of slots) {
+      if (s.on) continue;
+      const sx = s.x + layOffset, d = Math.abs(sx - CLAMP_X);
+      if (sx >= CLAMP_X - LAY_PITCH * 0.6 && d < bd) { bd = d; best = s; }
+    }
+    if (best) { best.on = true; gsap.fromTo(best.lit, { opacity: 1, scaleY: 0, transformOrigin: '50% 0%' }, { scaleY: 1, duration: 0.32, ease: 'power3.out' }); }
+  }
+  function recycleLay() {
+    for (const s of slots) {
+      if (s.x + layOffset < -LAY_PITCH * 2) { s.x += laySpan; s.on = false; s.g.setAttribute('transform', `translate(${s.x},0)`); s.lit.setAttribute('opacity', 0); }
+    }
+  }
+
   // ===================== god-rays =====================
   if (raysG) {
     const apex = { x: 660, y: -90 };
@@ -115,9 +147,9 @@ export function initHeroAbout(ctx) {
     raysG.style.mixBlendMode = 'screen';
   }
 
-  // ===================== the robot (scrubbing the wall) + reflection =====================
+  // ===================== the robot (a clamp that lays glowing tiles) + reflection =====================
   const BOT_X = 210, BOT_Y = 120;
-  let armEl = null, brushEl = null, lensEl = null, botInner = null;
+  let armEl = null, clampEl = null, heldEl = null, lensEl = null, botInner = null;
   function botShape(parent, ghost) {
     const inner = S('g', ghost ? {} : { 'data-bot-inner': '' });
     const col = ghost ? '#0a2a30' : '#08130f';
@@ -127,16 +159,19 @@ export function initHeroAbout(ctx) {
     inner.appendChild(S('rect', { x: 8, y: -28, width: 16, height: 11, rx: 2, fill: ghost ? '#0a2a30' : '#05100e' })); // sensor housing
     const lens = S('g', ghost ? {} : { 'data-bot-lens': '' });
     lens.appendChild(S('circle', { cx: 16, cy: -22, r: 3.4, fill: ghost ? '#1c5a60' : '#7FD9CF' }));
-    // arm reaching up the wall (toward -y / the coping), with a scrubbing brush
+    inner.appendChild(S('circle', { cx: -18, cy: -14, r: 8, fill: ghost ? '#0c3038' : '#0a1614', stroke: ghost ? 'none' : '#2E7E80', 'stroke-width': 1, 'stroke-opacity': 0.5 })); // rotary shoulder joint
+    // arm reaching up the wall (toward -y), ending in a clamp gripping ONE glowing tile
     const arm = S('g', ghost ? {} : { 'data-arm': '' });
-    arm.appendChild(S('polygon', { points: '-20,-18 -12,-22 -40,-64 -50,-58', fill: ghost ? '#0c3038' : '#0a1614' }));
-    const brush = S('g', ghost ? {} : { 'data-brush': '' });
-    brush.appendChild(S('rect', { x: -58, y: -72, width: 24, height: 8, rx: 2, fill: col }));
-    brush.appendChild(S('path', { d: 'M-54,-64 l0,6 M-48,-64 l0,6 M-42,-64 l0,6 M-38,-64 l0,6', stroke: ghost ? '#0c3038' : '#0a1614', 'stroke-width': 1.6 }));
-    arm.appendChild(brush);
+    arm.appendChild(S('polygon', { points: '-24,-12 -14,-18 -46,-66 -56,-60', fill: ghost ? '#0c3038' : '#0a1614' })); // forearm
+    const clamp = S('g', ghost ? {} : { 'data-clamp': '' });
+    clamp.appendChild(S('rect', { x: -68, y: -82, width: 22, height: 5, rx: 1.5, fill: col })); // upper jaw
+    clamp.appendChild(S('rect', { x: -68, y: -60, width: 22, height: 5, rx: 1.5, fill: col })); // lower jaw
+    const held = S('rect', { x: -66, y: -77, width: 18, height: 16, rx: 1, fill: 'url(#uw-fresh)', opacity: 0, 'data-held': '' });
+    clamp.appendChild(held);
+    arm.appendChild(clamp);
     inner.appendChild(arm); inner.appendChild(lens);
     parent.appendChild(inner);
-    return { inner, arm, brush, lens };
+    return { inner, arm, clamp, held, lens };
   }
   if (botRefG) {
     botRefG.setAttribute('transform', `translate(${BOT_X + 14},${BOT_Y + 168}) scale(1,-0.86)`);
@@ -146,7 +181,7 @@ export function initHeroAbout(ctx) {
   if (botG) {
     botG.setAttribute('transform', `translate(${BOT_X},${BOT_Y})`);
     const r = botShape(botG, false);
-    botInner = r.inner; armEl = r.arm; brushEl = r.brush; lensEl = r.lens;
+    botInner = r.inner; armEl = r.arm; clampEl = r.clamp; heldEl = r.held; lensEl = r.lens;
   }
 
   // ===================== caustics canvas: bubbles + mouse ripples =====================
@@ -216,8 +251,23 @@ export function initHeroAbout(ctx) {
   // ===================== ambient life: caustics shimmer, god-rays, scrub =====================
   if (turb) gsap.to(turb, { attr: { baseFrequency: '0.015 0.032' }, duration: 9, yoyo: true, repeat: -1, ease: 'sine.inOut' });
   if (raysG) gsap.to(raysG.querySelectorAll('[data-ray]'), { opacity: '+=0.05', duration: 'random(4,7)', yoyo: true, repeat: -1, ease: 'sine.inOut', stagger: { each: 0.6, from: 'random' } });
-  if (armEl) gsap.to(armEl, { rotation: 9, duration: 0.85, yoyo: true, repeat: -1, ease: 'sine.inOut', transformOrigin: '50% 100%' });
-  if (brushEl) gsap.to(brushEl, { x: 5, duration: 0.85, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+
+  // the clamp tile-laying cycle: grip a glowing tile → swing it down → press it flat onto
+  // the wall (a 2.5D flip) → release → lift → translate along the wall. Endless.
+  if (armEl) {
+    gsap.set(armEl, { transformOrigin: '50% 100%', rotation: -13 });
+    gsap.set(heldEl, { opacity: 0 });
+    gsap.timeline({ repeat: -1 })
+      .to({}, { duration: 0.4 })                                                        // 1 rest, arm lifted
+      .set(heldEl, { opacity: 1, scaleY: 1, transformOrigin: '50% 0%' })                // 2 a fresh tile in the clamp
+      .to(armEl, { rotation: 14, duration: 0.5, ease: 'power2.inOut' })                 // 3 swing the tile down to the wall
+      .to(heldEl, { scaleY: 0.08, duration: 0.18, ease: 'power2.in' })                  // 4 press: tile flips toward the wall
+      .add(seatFrontier)                                                                //   ...lights flat on the wall
+      .to(heldEl, { opacity: 0, duration: 0.1 })                                        // 5 clamp releases
+      .to(armEl, { rotation: -13, duration: 0.5, ease: 'power2.inOut' })                // 6 lift away
+      .to(layG, { x: () => layOffset - LAY_PITCH, duration: 0.5, ease: 'power1.inOut',  // 7 translate along the wall
+        onComplete() { layOffset -= LAY_PITCH; recycleLay(); } });
+  }
 
   // ===================== float to the surface (pinned, scrubbed) → cosmos =====================
   gsap.set(cosmos, { opacity: 0 });
