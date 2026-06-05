@@ -61,28 +61,52 @@
 .sec-sub{ color:var(--ink-soft); font-size:var(--fs-body); }
 .section-paper .sec-sub{ color:var(--paper-dim); }
 
-/* ===================== 01→02 Hero / About ===================== */
-#hero-about{ background:var(--void); }
-#hero-about .stars{ position:absolute; inset:-40%; transform-origin:center; will-change:transform,opacity; }
-#hero-about .stars i{ position:absolute; border-radius:50%; background:#cfeaff; display:block; }
-.bloom{
-  position:absolute; inset:0; z-index:1; opacity:0; transform:scale(.15); transform-origin:center;
-  background:radial-gradient(circle at 50% 46%,#3cc0ef 0%,var(--zima) 34%,var(--zima-deep) 64%,var(--zima-abyss) 100%);
-}
-#hero-about .vignette{ position:absolute; inset:0; z-index:2; pointer-events:none;
-  background:radial-gradient(120% 120% at 50% 46%,transparent 55%,rgba(2,18,30,.45) 100%); }
-#hero-about .scene{ position:absolute; inset:0; z-index:3;
-  display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 1.2rem; }
-.void-inner{ display:flex; flex-direction:column; align-items:center; gap:1.3rem; will-change:transform,opacity; transform-origin:center; }
-.void-dot{ width:14px; height:14px; border-radius:50%; background:var(--zima); box-shadow:0 0 26px 9px rgba(31,162,214,.75); }
-.void-mark{ font-weight:300; font-size:var(--fs-hero); letter-spacing:-.035em; line-height:.9; }
-.void-tag{ color:var(--ink-dim); }
-.scroll-cue{ position:absolute; bottom:8%; color:var(--ink-faint); animation:bob 2.4s ease-in-out infinite; }
-@keyframes bob{ 0%,100%{transform:translateY(0);opacity:.6} 50%{transform:translateY(6px);opacity:1} }
+/* ===================== 01 Hero = the angled pool → cosmos ===================== */
+#hero-about{ background:#04070d; }
 
-.resolve{ opacity:1; z-index:3; }   /* container visible; its children start hidden via JS */
-#hero-about .void{ z-index:4; }     /* hero sits above the about layer during the dive */
-.resolve .sig{ width:min(58vw,440px); height:auto; filter:drop-shadow(0 4px 18px rgba(255,255,255,.25)); margin-bottom:.4rem; }
+/* cosmos (revealed on the dive) — colourful nebula + stars */
+.cosmos{ position:absolute; inset:0; z-index:0; overflow:hidden;
+  background:
+    radial-gradient(42% 52% at 22% 32%, rgba(70,110,225,.34), transparent 60%),
+    radial-gradient(46% 56% at 80% 66%, rgba(150,70,205,.26), transparent 62%),
+    radial-gradient(38% 46% at 62% 22%, rgba(40,185,205,.22), transparent 60%),
+    radial-gradient(70% 70% at 50% 50%, #0a1424 0%, #05080f 68%, #02040a 100%); }
+.cosmos .nebula{ position:absolute; inset:-12%; mix-blend-mode:screen; filter:blur(26px);
+  background:
+    radial-gradient(30% 40% at 30% 60%, rgba(120,90,255,.22), transparent 60%),
+    radial-gradient(28% 36% at 72% 40%, rgba(60,205,255,.20), transparent 60%),
+    radial-gradient(24% 30% at 54% 78%, rgba(255,120,90,.10), transparent 60%); }
+.cosmos .stars{ position:absolute; inset:-15%; }
+.cosmos .stars i{ position:absolute; display:block; border-radius:50%; background:#dff1ff; }
+
+/* the pool, angled 3/4 */
+.pool-scene{ position:absolute; inset:0; z-index:2; display:grid; place-items:center; perspective:1100px; }
+.pool-floor{ position:relative; width:min(86vw,1000px); height:60vh; transform-style:preserve-3d; border-radius:10px;
+  background:linear-gradient(180deg,#0a5e8c,#0c6f9f 60%,#0a5274);
+  box-shadow:0 50px 130px rgba(0,0,0,.55), inset 0 0 70px rgba(3,22,34,.6); }
+.pool-grid{ position:absolute; inset:9px; display:grid; gap:3px;
+  grid-template-columns:repeat(var(--cols,12),1fr); grid-template-rows:repeat(var(--rows,7),1fr); }
+.ptile{ border-radius:2px; background:rgba(8,42,62,.65); box-shadow:inset 0 0 0 1px rgba(127,200,235,.06);
+  transition:background .35s var(--e-out), box-shadow .35s; }
+.ptile.laid{ background:#1FA2D6; box-shadow:inset 0 0 0 1px rgba(255,255,255,.2), 0 0 10px rgba(31,162,214,.45); }
+.pbot{ position:absolute; left:0; top:60%; width:42px; height:auto; filter:drop-shadow(0 8px 9px rgba(0,0,0,.5)); }
+.pool-surface{ position:absolute; inset:0; z-index:1; pointer-events:none; mix-blend-mode:screen;
+  background:radial-gradient(60% 50% at 50% 28%, rgba(160,230,255,.12), transparent 60%); }
+.pool-ripple{ position:fixed; z-index:6; width:14px; height:14px; border-radius:50%;
+  border:1.5px solid rgba(170,228,255,.75); pointer-events:none; }
+
+/* poolside copy (flat overlay) */
+.hero-copy{ position:absolute; z-index:3; left:0; right:0; top:16%; display:flex; flex-direction:column; align-items:center; gap:1.1rem; text-align:center; pointer-events:none; }
+.void-dot{ width:13px; height:13px; border-radius:50%; background:var(--zima); box-shadow:0 0 26px 9px rgba(31,162,214,.7); }
+.void-mark{ font-weight:300; font-size:var(--fs-hero); letter-spacing:-.035em; line-height:.9; }
+.void-tag{ color:var(--ink-soft); }
+.scroll-cue{ position:absolute; z-index:3; bottom:7%; left:50%; transform:translateX(-50%); color:var(--ink-faint); opacity:.7; animation:bob 2.4s ease-in-out infinite; }
+@keyframes bob{ 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+
+/* signature + about, layered above the cosmos during/after the dive */
+#hero-about .sig-layer{ position:absolute; inset:0; z-index:4; display:grid; place-items:center; pointer-events:none; }
+#hero-about .sig-layer .sig{ width:min(58vw,440px); height:auto; filter:drop-shadow(0 4px 18px rgba(255,255,255,.25)); }
+#hero-about .resolve{ position:absolute; inset:0; z-index:5; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 1.2rem; }
 .resolve-label{ color:#dff4ff; opacity:.85; margin-bottom:1rem; letter-spacing:.28em; }
 .resolve-lines{ max-width:680px; }
 .resolve-lines .line-mask{ padding:4px 0; }

@@ -13,8 +13,6 @@ import { initRail } from './rail.js';
 import { initReveals } from './reveal.js';
 import { initHeroAbout } from './heroAbout.js';
 import { initCursor } from './cursor.js';
-import { initPaintings } from './paintings.js';
-import { initPoolRobot } from './poolRobot.js';
 import { initParallax } from './parallax.js';
 
 const gsap = window.gsap, ScrollTrigger = window.ScrollTrigger, Flip = window.Flip;
@@ -56,9 +54,7 @@ async function boot(pl) {
   safe('workflow', () => initWorkflow(ctx));
   safe('research', () => initResearch(ctx));
   safe('gallery', () => initGallery(ctx));
-  safe('paintings', () => initPaintings(ctx));
   safe('contact', () => initContact(ctx));
-  safe('poolRobot', () => initPoolRobot(ctx));
   safe('heroAbout', () => initHeroAbout(ctx));
   safe('rail', () => initRail(ctx));
 

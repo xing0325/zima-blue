@@ -58,44 +58,56 @@
 
   <main id="top">
 
-    <!-- ===== 01→02 · Hero → About (one pinned, scroll-driven stage) ===== -->
+    <!-- ===== 01 · Hero = the angled pool (robot tiling) → dive into the cosmos ===== -->
     <section id="hero-about" class="pin-stage" data-beat="01">
-      <!-- depth starfields -->
-      <div class="stars" data-stars="far"></div>
-      <div class="stars" data-stars="near"></div>
-      <!-- Zima-blue bloom revealed on scroll -->
-      <div class="bloom" data-bloom></div>
-      <div class="vignette"></div>
-
-      <!-- THE VOID -->
-      <div class="scene void" data-scene="void">
-        <div class="void-inner" data-void-inner>
-          <span class="void-dot" data-void-dot></span>
-          <h1 class="void-mark">chichu</h1>
-          <p class="void-tag mono">十八岁 · vibe coder · 在寻找更好的交互</p>
-        </div>
-        <div class="scroll-cue mono" data-scroll-cue>向下滚动 ↓ 开始下潜</div>
+      <!-- cosmos, revealed as you dive through the water -->
+      <div class="cosmos" data-cosmos>
+        <div class="nebula"></div>
+        <div class="stars" data-stars></div>
       </div>
 
-      <!-- RESOLVE / About -->
-      <div class="scene resolve" data-scene="resolve">
-        <svg class="sig" viewBox="0 0 760 240" fill="none" aria-label="chichu 的签名" data-signature>
+      <!-- the pool, in a 3/4 angled view -->
+      <div class="pool-scene" data-pool-scene>
+        <div class="pool-floor" data-pool-floor>
+          <div class="pool-grid" data-pool-grid></div>
+          <svg class="pbot" data-bot viewBox="0 0 60 72" fill="none" aria-hidden="true">
+            <rect x="16" y="54" width="8" height="14" rx="3" fill="#0e4a68"/>
+            <rect x="36" y="54" width="8" height="14" rx="3" fill="#0e4a68"/>
+            <rect x="10" y="20" width="40" height="38" rx="11" fill="#0c6f9f" stroke="#36c0ef" stroke-width="2"/>
+            <g data-bot-lens>
+              <circle cx="30" cy="36" r="9" fill="#04070d"/>
+              <circle cx="30" cy="36" r="5" fill="#36c0ef"/>
+              <circle cx="32" cy="34" r="1.6" fill="#fff"/>
+            </g>
+            <line x1="30" y1="20" x2="30" y2="10" stroke="#36c0ef" stroke-width="2"/>
+            <circle cx="30" cy="8" r="3" fill="#7fe3ff"/>
+            <rect x="46" y="40" width="12" height="12" rx="1" fill="#1FA2D6"/>
+          </svg>
+        </div>
+        <div class="pool-surface"></div>
+      </div>
+
+      <!-- poolside copy (flat overlay) -->
+      <div class="hero-copy" data-hero-copy>
+        <span class="void-dot" data-void-dot></span>
+        <h1 class="void-mark">chichu</h1>
+        <p class="void-tag mono">十八岁 · vibe coder · 在寻找更好的交互</p>
+      </div>
+      <div class="scroll-cue mono" data-scroll-cue>向下滚动 ↓ 潜入</div>
+
+      <!-- signature draws during the dive -->
+      <div class="sig-layer" data-sig-layer>
+        <svg class="sig" viewBox="0 0 760 240" fill="none" aria-label="chichu 的签名">
           <path class="sig-main" d="M70 168 C54 120 116 96 124 138 C130 172 132 58 152 58 C170 58 150 152 168 138 C182 127 188 152 200 150 C214 148 206 104 214 102 C222 150 240 172 256 138 C238 112 290 96 300 138 C306 172 308 58 328 58 C346 58 326 152 346 138 C362 126 374 152 392 150 C408 148 400 104 410 102 C414 150 436 164 456 138 C464 127 460 100 468 94 C482 112 540 150 660 118"
                 stroke="#f6fdff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
           <path class="sig-flourish" d="M60 206 C220 184 440 234 690 188" stroke="#d6f1ff" stroke-width="3.5" stroke-linecap="round"/>
         </svg>
+      </div>
+
+      <!-- About lands after the dive -->
+      <div class="scene resolve" data-scene="resolve">
         <p class="resolve-label label" data-bio-lead>关于 · chichu</p>
         <div class="resolve-lines" data-bio></div>
-      </div>
-    </section>
-
-    <!-- ===== 齐马的画作 · I — a jarring blue square appears in the cosmos ===== -->
-    <section class="painting" data-painting data-grow="0.34" data-beat="art-1">
-      <div class="art-stars" data-stars-depth data-depth="0.15"></div>
-      <div class="art-square" data-art-square></div>
-      <div class="art-plaque">
-        <span class="label">画作 · 一</span>
-        <p class="art-cap serif">起初，宇宙是满的。直到某天，画里浮现出一个不属于它的、突兀的蓝色方块。</p>
       </div>
     </section>
 
@@ -142,34 +154,10 @@
       </div>
     </section>
 
-    <!-- ===== 齐马的画作 · 终 — the square has almost eaten the stars ===== -->
-    <section class="painting" data-painting data-grow="0.98" data-beat="art-2">
-      <div class="art-stars" data-stars-depth data-depth="0.12"></div>
-      <div class="art-square" data-art-square></div>
-      <div class="art-plaque">
-        <span class="label">画作 · 终</span>
-        <p class="art-cap serif">几十年里，方块越长越大，吞掉了星辰。那抹蓝，是一格泳池池底瓷砖的颜色——他想起了自己最初的样子。</p>
-      </div>
-    </section>
-
     <!-- ===== 06 · The tile / Contact + ripples message board ===== -->
     <section id="contact" class="pin-stage tile-stage" data-beat="06">
       <div class="pool" data-pool>
         <canvas class="ripple-canvas" data-ripples></canvas>
-        <div class="pool-floor" data-pool-floor aria-hidden="true">
-          <div class="tiles" data-floor-tiles></div>
-          <svg class="bot" data-bot viewBox="0 0 60 72" fill="none" aria-hidden="true">
-            <rect x="16" y="54" width="8" height="14" rx="3" fill="#0e4a68"/>
-            <rect x="36" y="54" width="8" height="14" rx="3" fill="#0e4a68"/>
-            <rect x="10" y="20" width="40" height="38" rx="11" fill="#0c6f9f" stroke="#36c0ef" stroke-width="2"/>
-            <circle cx="30" cy="36" r="9" fill="#04070d"/>
-            <circle cx="30" cy="36" r="5" fill="#36c0ef"/>
-            <circle cx="32" cy="34" r="1.6" fill="#fff"/>
-            <line x1="30" y1="20" x2="30" y2="10" stroke="#36c0ef" stroke-width="2"/>
-            <circle cx="30" cy="8" r="3" fill="#7fe3ff"/>
-            <rect x="46" y="40" width="12" height="12" rx="2" fill="#1FA2D6" stroke="#7fe3ff" stroke-width="1.5"/>
-          </svg>
-        </div>
         <div class="tile" data-tile>
           <div class="tile-face">
             <p class="tile-title serif">一格齐马蓝</p>
