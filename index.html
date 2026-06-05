@@ -66,57 +66,26 @@
         <div class="stars" data-stars></div>
       </div>
 
-      <!-- the pool: a top-down rectangular box well (4 tiled walls + floor) -->
-      <div class="well" data-well>
-        <svg class="well-svg" viewBox="0 0 1000 680" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-          <!-- walls -->
-          <polygon points="90,80 910,80 630,300 370,300" fill="#0a4f70"/>
-          <polygon points="90,80 90,600 370,440 370,300" fill="#0b5675"/>
-          <polygon points="910,80 910,600 630,440 630,300" fill="#0b5675"/>
-          <polygon points="90,600 910,600 630,440 370,440" fill="#0e6488"/>
-          <!-- floor / well bottom -->
-          <polygon points="370,300 630,300 630,440 370,440" fill="#06121c"/>
-          <g fill="#cfe6ff">
-            <circle cx="430" cy="345" r="1.6"/><circle cx="520" cy="382" r="2"/><circle cx="585" cy="330" r="1.5"/>
-            <circle cx="470" cy="412" r="1.4"/><circle cx="560" cy="420" r="1.7"/><circle cx="500" cy="352" r="1.3"/>
+      <!-- the shaft: concentric tiled frames receding to the dark bottom -->
+      <div class="shaft" data-shaft>
+        <div class="rings" data-rings></div>
+        <svg class="pbot" data-bot viewBox="-3 -7 86 100" fill="none" aria-hidden="true">
+          <g class="pbot-arm" data-arm>
+            <line x1="40" y1="34" x2="40" y2="58" stroke="#7fb6d6" stroke-width="4" stroke-linecap="round"/>
+            <line x1="40" y1="58" x2="58" y2="74" stroke="#9fd0ea" stroke-width="4" stroke-linecap="round"/>
+            <rect class="pbot-tile" x="52" y="70" width="12" height="12" fill="#1FA2D6"/>
           </g>
-          <!-- tile seams -->
-          <g stroke="rgba(190,228,248,.12)" stroke-width="1.4" fill="none">
-            <line x1="227" y1="600" x2="413" y2="440"/><line x1="363" y1="600" x2="457" y2="440"/>
-            <line x1="500" y1="600" x2="500" y2="440"/><line x1="637" y1="600" x2="543" y2="440"/>
-            <line x1="773" y1="600" x2="587" y2="440"/>
-            <line x1="227" y1="80" x2="413" y2="300"/><line x1="500" y1="80" x2="500" y2="300"/><line x1="773" y1="80" x2="587" y2="300"/>
-            <line x1="90" y1="220" x2="370" y2="330"/><line x1="90" y1="430" x2="370" y2="395"/>
-            <line x1="910" y1="220" x2="630" y2="330"/><line x1="910" y1="430" x2="630" y2="395"/>
+          <rect x="22" y="8" width="36" height="30" rx="9" fill="#0c6f9f" stroke="#36c0ef" stroke-width="2"/>
+          <g data-bot-lens>
+            <circle cx="40" cy="23" r="8" fill="#04070d"/>
+            <circle cx="40" cy="23" r="4.4" fill="#36c0ef"/>
+            <circle cx="42" cy="21" r="1.4" fill="#fff"/>
           </g>
-          <!-- laid blue tiles (flat, sharp) where the robot is working -->
-          <g fill="#1FA2D6">
-            <rect x="432" y="560" width="40" height="38"/><rect x="474" y="560" width="40" height="38"/><rect x="516" y="560" width="40" height="38"/>
-            <rect x="440" y="520" width="36" height="38"/><rect x="478" y="520" width="36" height="38"/><rect x="516" y="520" width="36" height="38"/>
-            <rect x="448" y="481" width="32" height="37"/><rect x="484" y="481" width="32" height="37"/><rect x="518" y="481" width="32" height="37"/>
-          </g>
-          <!-- the robot tiling the near wall -->
-          <g data-bot transform="translate(500,512) scale(1.25)">
-            <g data-bot-inner>
-              <g class="pbot-arm" data-arm>
-                <line x1="0" y1="-4" x2="2" y2="-34" stroke="#7fb6d6" stroke-width="5" stroke-linecap="round"/>
-                <line x1="2" y1="-34" x2="22" y2="-52" stroke="#9fd0ea" stroke-width="5" stroke-linecap="round"/>
-                <rect class="pbot-tile" x="16" y="-60" width="15" height="15" fill="#1FA2D6"/>
-              </g>
-              <rect x="-23" y="-4" width="46" height="36" rx="11" fill="#0c6f9f" stroke="#36c0ef" stroke-width="2.5"/>
-              <g data-bot-lens>
-                <circle cx="0" cy="14" r="10" fill="#04070d"/>
-                <circle cx="0" cy="14" r="5.6" fill="#36c0ef"/>
-                <circle cx="3" cy="11" r="1.9" fill="#fff"/>
-              </g>
-              <line x1="0" y1="-4" x2="0" y2="-14" stroke="#36c0ef" stroke-width="2.5"/>
-              <circle cx="0" cy="-16" r="3.4" fill="#7fe3ff"/>
-            </g>
-          </g>
+          <line x1="40" y1="8" x2="40" y2="0" stroke="#36c0ef" stroke-width="2"/>
+          <circle cx="40" cy="-2" r="2.6" fill="#7fe3ff"/>
         </svg>
       </div>
-      <canvas class="water" data-water></canvas>
-      <div class="well-vignette"></div>
+      <div class="shaft-vignette"></div>
 
       <!-- poolside copy (flat overlay) -->
       <div class="hero-copy" data-hero-copy>
