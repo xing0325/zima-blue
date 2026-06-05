@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>泳池这屏 · 三个方案</title>
+<style>
+  :root{ --zima:#1FA2D6; --bg:#04070d; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{ background:radial-gradient(120% 120% at 50% 20%,#0a1626,#04070d 70%); color:#eaf4fb;
+    font-family:system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; padding:38px 20px 60px; }
+  h1{ font-weight:500; font-size:clamp(1.4rem,3vw,2rem); text-align:center; letter-spacing:-.01em; }
+  .lead{ text-align:center; color:#9fb8c9; max-width:60ch; margin:10px auto 6px; font-size:.95rem; line-height:1.6; }
+  .lead b{ color:#7fd6ff; font-weight:500; }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(330px,1fr)); gap:20px; max-width:1180px; margin:32px auto; }
+  .card{ background:#0b1422; border:1px solid rgba(127,180,220,.16); border-radius:14px; overflow:hidden;
+    box-shadow:0 18px 50px rgba(0,0,0,.4); }
+  .stage{ background:radial-gradient(120% 120% at 50% 30%,#0a1a2a,#05080f 72%); }
+  svg{ display:block; width:100%; height:auto; }
+  .body{ padding:16px 18px 20px; }
+  .tag{ font-family:ui-monospace,monospace; font-size:.66rem; letter-spacing:.16em; text-transform:uppercase; color:#7fb2d6; }
+  .name{ font-size:1.15rem; font-weight:500; margin:5px 0 8px; }
+  .name .rec{ font-size:.6rem; color:var(--zima); border:1px solid var(--zima); border-radius:999px; padding:2px 7px; margin-left:8px; vertical-align:middle; letter-spacing:.05em; }
+  .desc{ color:#bcd2e2; font-size:.9rem; line-height:1.6; }
+  .dive{ margin-top:10px; font-family:ui-monospace,monospace; font-size:.74rem; color:#8fbfe0; }
+  .ask{ text-align:center; color:#9fb8c9; margin-top:18px; font-size:.95rem; }
+  .ask b{ color:#fff; }
+  /* tiling animation */
+  .arm{ transform-origin:var(--ox,0px) var(--oy,0px); animation:swing 4s ease-in-out infinite; }
+  @keyframes swing{ 0%,12%{ transform:rotate(0deg);} 38%{ transform:rotate(-26deg);} 60%{ transform:rotate(-26deg);} 86%,100%{ transform:rotate(0deg);} }
+  .newtile{ animation:place 4s ease-in-out infinite; }
+  @keyframes place{ 0%,46%{ opacity:0;} 60%,100%{ opacity:1;} }
+  .twinkle{ animation:tw 3s ease-in-out infinite; }
+  @keyframes tw{ 0%,100%{opacity:.35} 50%{opacity:1} }
+  @media (prefers-reduced-motion:reduce){ .arm,.newtile,.twinkle{ animation:none; } .newtile{opacity:1} }
+</style>
+</head>
+<body>
+  <h1>泳池这屏 · 三个方案</h1>
+  <p class="lead">共同点已定：<b>没有顶面的 3D 开口池箱</b>（有侧壁+深度）· <b>机械臂缓慢一块块把瓷砖贴上池壁</b> · 视角拉近 · 鼠标用<b>轨道视差</b>。下面只比「相机怎么摆 + 潜水怎么潜」。每张里那条小臂在慢慢往墙上放砖。</p>
+
+  <div class="grid">
+
+    <!-- ============ B · ¾ 近景 ============ -->
+    <div class="card">
+      <div class="stage">
+        <svg viewBox="0 0 480 340" aria-label="¾ 开口池箱">
+          <!-- back wall -->
+          <polygon points="140,120 340,120 340,200 140,200" fill="#0e5f86"/>
+          <!-- left wall -->
+          <polygon points="90,210 140,120 140,200 90,290" fill="#0a4f70"/>
+          <!-- right wall -->
+          <polygon points="390,210 340,120 340,200 390,290" fill="#0c5a7e"/>
+          <!-- floor -->
+          <polygon points="90,290 390,290 340,200 140,200" fill="#0c6f9f"/>
+          <!-- floor tile hints -->
+          <g stroke="rgba(180,220,240,.12)" stroke-width="1">
+            <line x1="140" y1="200" x2="90" y2="290"/><line x1="190" y1="200" x2="165" y2="290"/>
+            <line x1="240" y1="200" x2="240" y2="290"/><line x1="290" y1="200" x2="315" y2="290"/>
+            <line x1="160" y1="230" x2="320" y2="230"/><line x1="125" y1="260" x2="355" y2="260"/>
+          </g>
+          <!-- back wall grid -->
+          <g stroke="rgba(180,220,240,.13)" stroke-width="1">
+            <line x1="165" y1="120" x2="165" y2="200"/><line x1="190" y1="120" x2="190" y2="200"/>
+            <line x1="215" y1="120" x2="215" y2="200"/><line x1="240" y1="120" x2="240" y2="200"/>
+            <line x1="265" y1="120" x2="265" y2="200"/><line x1="290" y1="120" x2="290" y2="200"/>
+            <line x1="315" y1="120" x2="315" y2="200"/>
+            <line x1="140" y1="147" x2="340" y2="147"/><line x1="140" y1="173" x2="340" y2="173"/>
+          </g>
+          <!-- laid blue tiles climbing the back wall -->
+          <g fill="var(--zima)">
+            <rect x="141" y="174" width="23" height="25"/><rect x="166" y="174" width="23" height="25"/>
+            <rect x="191" y="174" width="23" height="25"/><rect x="216" y="174" width="23" height="25"/>
+            <rect x="141" y="148" width="23" height="24"/><rect x="166" y="148" width="23" height="24"/>
+            <rect x="191" y="148" width="23" height="24"/>
+            <rect x="141" y="121" width="23" height="25"/>
+          </g>
+          <rect class="newtile" x="166" y="121" width="23" height="25" fill="#7fe3ff"/>
+          <!-- robot on the floor by the back wall, arm placing a tile up the wall -->
+          <g transform="translate(150,205)">
+            <rect x="-13" y="0" width="26" height="26" rx="6" fill="#0c6f9f" stroke="#36c0ef" stroke-width="2"/>
+            <circle cx="0" cy="12" r="5" fill="#04070d"/><circle cx="0" cy="12" r="2.6" fill="#36c0ef"/>
+            <g class="arm" style="--ox:8px;--oy:2px">
+              <line x1="8" y1="2" x2="30" y2="-30" stroke="#9fd0ea" stroke-width="3" stroke-linecap="round"/>
+              <rect x="26" y="-40" width="11" height="11" fill="#7fe3ff"/>
+            </g>
+          </g>
+          <!-- opening rim -->
+          <polygon points="90,210 390,210 340,120 140,120" fill="none" stroke="rgba(160,224,255,.5)" stroke-width="1.5"/>
+          <text x="240" y="40" fill="#dfeffb" font-size="20" text-anchor="middle" font-family="system-ui">chichu</text>
+        </svg>
+      </div>
+      <div class="body">
+        <span class="tag">B · 池边 · 近景</span>
+        <div class="name">¾ 角看进池箱 <span class="rec">推荐</span></div>
+        <p class="desc">¾ 角度看进一个开口池箱，看得见侧壁厚度与池底。机器人在近侧壁、机械臂缓慢往墙上一块块贴砖——最贴原著那张图。亲密、忠实、铺砖过程最清楚。</p>
+        <div class="dive">潜水：↓ 镜头沿池壁下沉 → 穿过池底 → 星云</div>
+      </div>
+    </div>
+
+    <!-- ============ A · 俯视深井 ============ -->
+    <div class="card">
+      <div class="stage">
+        <svg viewBox="0 0 480 340" aria-label="俯视深井池">
+          <!-- four walls receding to a small floor at center -->
+          <polygon points="60,50 420,50 300,150 180,150" fill="#0e5f86"/>   <!-- top wall -->
+          <polygon points="420,50 420,300 300,210 300,150" fill="#0c5a7e"/> <!-- right wall -->
+          <polygon points="60,300 420,300 300,210 180,210" fill="#0a4f70"/> <!-- bottom wall -->
+          <polygon points="60,50 60,300 180,210 180,150" fill="#0e5f86"/>   <!-- left wall -->
+          <!-- tile hint rings -->
+          <g fill="none" stroke="rgba(180,220,240,.12)" stroke-width="1">
+            <polygon points="100,80 380,80 290,160 190,160"/>
+            <polygon points="140,110 340,110 280,178 200,178"/>
+          </g>
+          <!-- laid blue tiles on the bottom wall -->
+          <g fill="var(--zima)">
+            <polygon points="150,300 200,300 210,255 175,255"/>
+            <polygon points="205,300 255,300 250,255 215,255"/>
+            <polygon points="175,253 215,253 218,228 190,228"/>
+          </g>
+          <polygon class="newtile" points="220,253 258,253 250,228 222,228" fill="#7fe3ff"/>
+          <!-- floor (well bottom) = cosmos -->
+          <polygon points="180,150 300,150 300,210 180,210" fill="#05080f"/>
+          <g fill="#dff1ff" class="twinkle">
+            <circle cx="210" cy="170" r="1.5"/><circle cx="250" cy="185" r="1.8"/><circle cx="275" cy="165" r="1.4"/>
+            <circle cx="225" cy="195" r="1.3"/><circle cx="262" cy="200" r="1.5"/>
+          </g>
+          <!-- robot on the bottom wall, arm to the wall -->
+          <g transform="translate(150,250)">
+            <rect x="-11" y="0" width="22" height="22" rx="5" fill="#0c6f9f" stroke="#36c0ef" stroke-width="2"/>
+            <circle cx="0" cy="10" r="4" fill="#04070d"/><circle cx="0" cy="10" r="2.2" fill="#36c0ef"/>
+            <g class="arm" style="--ox:7px;--oy:2px">
+              <line x1="7" y1="2" x2="26" y2="-18" stroke="#9fd0ea" stroke-width="3" stroke-linecap="round"/>
+              <rect x="22" y="-26" width="10" height="10" fill="#7fe3ff"/>
+            </g>
+          </g>
+          <rect x="60" y="50" width="360" height="250" fill="none" stroke="rgba(160,224,255,.5)" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="body">
+        <span class="tag">A · 下潜井 · 俯视</span>
+        <div class="name">从上往下看进深井</div>
+        <p class="desc">从正上方看进一口「深井般」的池，四壁瓷砖向下没入井底的黑暗，井底就是宇宙。往下滚 = 你坠下井、掠过池壁、从井底破入星空——潜水感最强、最电影化，代价是机器人偏小。</p>
+        <div class="dive">潜水：↓ 坠井 · 掠过四壁 → 破井底入宇宙</div>
+      </div>
+    </div>
+
+    <!-- ============ C · 剖面 ============ -->
+    <div class="card">
+      <div class="stage">
+        <svg viewBox="0 0 480 340" aria-label="剖面图感">
+          <!-- pool interior (water) -->
+          <rect x="150" y="108" width="280" height="160" fill="rgba(31,162,214,.16)"/>
+          <!-- water line -->
+          <path d="M150 108 q 20 -8 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0" fill="none" stroke="#7fd6ff" stroke-width="2" opacity=".8"/>
+          <!-- left wall tiled -->
+          <rect x="70" y="70" width="80" height="200" fill="#0c5a7e"/>
+          <g stroke="rgba(180,220,240,.14)" stroke-width="1">
+            <line x1="90" y1="70" x2="90" y2="270"/><line x1="110" y1="70" x2="110" y2="270"/><line x1="130" y1="70" x2="130" y2="270"/>
+            <line x1="70" y1="100" x2="150" y2="100"/><line x1="70" y1="130" x2="150" y2="130"/><line x1="70" y1="160" x2="150" y2="160"/>
+            <line x1="70" y1="190" x2="150" y2="190"/><line x1="70" y1="220" x2="150" y2="220"/><line x1="70" y1="250" x2="150" y2="250"/>
+          </g>
+          <g fill="var(--zima)">
+            <rect x="111" y="221" width="18" height="28"/><rect x="91" y="221" width="18" height="28"/><rect x="71" y="221" width="18" height="28"/>
+            <rect x="91" y="191" width="18" height="29"/><rect x="71" y="191" width="18" height="29"/>
+            <rect x="71" y="161" width="18" height="29"/>
+          </g>
+          <rect class="newtile" x="91" y="161" width="18" height="29" fill="#7fe3ff"/>
+          <!-- floor -->
+          <rect x="70" y="270" width="360" height="6" fill="#0a4f70"/>
+          <!-- below floor = cosmos -->
+          <rect x="70" y="276" width="360" height="56" fill="#05080f"/>
+          <g fill="#dff1ff" class="twinkle">
+            <circle cx="160" cy="300" r="1.5"/><circle cx="220" cy="312" r="1.8"/><circle cx="300" cy="296" r="1.4"/>
+            <circle cx="360" cy="314" r="1.6"/><circle cx="410" cy="300" r="1.3"/>
+          </g>
+          <!-- robot at base of wall, arm up the wall -->
+          <g transform="translate(150,236)">
+            <rect x="0" y="0" width="24" height="24" rx="5" fill="#0c6f9f" stroke="#36c0ef" stroke-width="2"/>
+            <circle cx="12" cy="11" r="4.5" fill="#04070d"/><circle cx="12" cy="11" r="2.4" fill="#36c0ef"/>
+            <g class="arm" style="--ox:2px;--oy:6px">
+              <line x1="2" y1="6" x2="-24" y2="-26" stroke="#9fd0ea" stroke-width="3" stroke-linecap="round"/>
+              <rect x="-32" y="-34" width="11" height="11" fill="#7fe3ff"/>
+            </g>
+          </g>
+          <text x="250" y="56" fill="#dfeffb" font-size="18" text-anchor="middle" font-family="system-ui">chichu</text>
+        </svg>
+      </div>
+      <div class="body">
+        <span class="tag">C · 剖面 · 图纸感</span>
+        <div class="name">侧剖面 / 工程图</div>
+        <p class="desc">像一张侧剖面图：干净的池壁立面，机械臂沿墙一块块往上贴砖，水线在上、池底之下就是宇宙。最有平面设计/克制气质，铺砖过程一目了然，代价是立体感最弱。</p>
+        <div class="dive">潜水：↓ 沉过水线 · 穿池底 → 星云</div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="ask">看完在终端告诉我：选 <b>B / A / C</b>，或者哪里还要改（角度、机器人、配色…都行）。</p>
+</body>
+</html>
