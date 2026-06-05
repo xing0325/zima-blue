@@ -147,7 +147,8 @@ export function initHeroAbout(ctx) {
   if (botG) {
     botG.setAttribute('transform', `translate(${ROBOT_LX},0)`);
     botInner = S('g', { 'data-bot-inner': '' });
-    botInner.appendChild(S('polygon', { points: '-48,-162 42,-162 54,-130 32,-118 -42,-118 -56,-134', fill: '#0E1418' }));
+    // faint zima rim so the dark silhouette always reads against the dark water
+    botInner.appendChild(S('polygon', { points: '-48,-162 42,-162 54,-130 32,-118 -42,-118 -56,-134', fill: '#0E1418', stroke: '#1FA8E0', 'stroke-width': 1.4, 'stroke-opacity': 0.55 }));
     botInner.appendChild(S('rect', { x: -12, y: -150, width: 24, height: 13, fill: '#05090c' }));
     const lensWrap = S('g', { 'data-bot-lens': '' });
     lensWrap.appendChild(S('circle', { cx: 14, cy: -140, r: 6, fill: '#04070d' }));
@@ -222,12 +223,12 @@ export function initHeroAbout(ctx) {
   if (starsCv) { try { buildStarfield(starsCv, stage, reduce); } catch (e) { /* non-fatal */ } }
 
   // ===================== reduced-motion / no-gsap fallback =====================
+  // Never cover the pool with the cosmos here — show the glowing pool as the hero.
   if (reduce || !gsap || !ScrollTrigger) {
-    if (sigMain) sigMain.style.strokeDashoffset = 0;
-    if (sigFlo) sigFlo.style.strokeDashoffset = 0;
-    if (cosmos) cosmos.style.opacity = 1;
-    if (resolve) resolve.style.opacity = 1;
-    if (pool) pool.style.opacity = 0.5;
+    if (cosmos) cosmos.style.opacity = 0;
+    if (pool) pool.style.opacity = 1;
+    if (sigLayer) sigLayer.style.display = 'none';
+    if (resolve) resolve.style.display = 'none';
     return;
   }
 
