@@ -61,44 +61,43 @@
 .sec-sub{ color:var(--ink-soft); font-size:var(--fs-body); }
 .section-paper .sec-sub{ color:var(--paper-dim); }
 
-/* ===================== 01 Hero = a deep tiled shaft → cosmos ===================== */
-#hero-about{ background:#04070d; }
+/* ===================== 01 Hero = the glowing pool → dive into the cosmos ===================== */
+#hero-about{ background:var(--cosmos); }
 
-/* well-bottom cosmos */
+/* deep-navy multicolour cosmos, revealed during the dive (never pure black) */
 .cosmos{ position:absolute; inset:0; z-index:0; overflow:hidden;
+  background:radial-gradient(120% 82% at 50% 60%, var(--cosmos-core-glow) 0%, var(--cosmos) 46%, var(--cosmos-vignette) 100%); }
+.cosmos .neb-band{ position:absolute; left:-10%; right:-10%; top:46%; height:30%; transform:translateY(-50%);
   background:
-    radial-gradient(42% 52% at 28% 34%, rgba(70,110,225,.30), transparent 60%),
-    radial-gradient(46% 56% at 74% 64%, rgba(150,70,205,.24), transparent 62%),
-    radial-gradient(36% 44% at 58% 24%, rgba(40,185,205,.20), transparent 60%),
-    radial-gradient(70% 70% at 50% 50%, #0a1424 0%, #05080f 70%, #02040a 100%); }
-.cosmos .nebula{ position:absolute; inset:-12%; mix-blend-mode:screen; filter:blur(28px);
-  background:
-    radial-gradient(30% 40% at 32% 60%, rgba(120,90,255,.20), transparent 60%),
-    radial-gradient(28% 36% at 70% 42%, rgba(60,205,255,.18), transparent 60%),
-    radial-gradient(24% 30% at 52% 80%, rgba(255,140,90,.10), transparent 60%); }
-.cosmos .stars{ position:absolute; inset:-15%; }
-.cosmos .stars i{ position:absolute; display:block; border-radius:50%; background:#dff1ff; }
+    radial-gradient(60% 60% at 38% 50%, rgba(199,127,214,.30), transparent 70%),
+    radial-gradient(50% 60% at 64% 50%, rgba(122,31,43,.26), transparent 72%),
+    radial-gradient(46% 60% at 52% 50%, rgba(46,92,107,.30), transparent 72%);
+  filter:blur(10px); mix-blend-mode:screen; }
+.cosmos .core-glow{ position:absolute; left:50%; top:50%; width:42vmin; height:42vmin; transform:translate(-50%,-50%);
+  background:radial-gradient(circle, var(--neb-violet-hot) 0%, var(--zima) 26%, transparent 68%);
+  opacity:.7; mix-blend-mode:screen; }
+.cosmos .starfield{ position:absolute; inset:0; width:100%; height:100%; display:block; }
 
-/* the shaft — concentric flat-tiled frames receding to the dark bottom */
-.shaft{ position:absolute; inset:0; z-index:2; transform-origin:50% 50%; }
-.rings{ position:absolute; inset:0; }
-.ring{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-  background-color:#0a3a52;
-  background-image:
-    repeating-linear-gradient(0deg, rgba(190,228,248,.13) 0 1px, transparent 1px var(--cell,18px)),
-    repeating-linear-gradient(90deg, rgba(190,228,248,.13) 0 1px, transparent 1px var(--cell,18px));
-  box-shadow:0 0 30px rgba(0,0,0,.28); }
-.shaft-vignette{ position:absolute; inset:0; z-index:3; pointer-events:none;
-  background:radial-gradient(36% 36% at 50% 50%, transparent 42%, rgba(2,8,14,.6) 100%); }
-.pbot{ position:absolute; z-index:4; left:50%; top:6.5%; width:54px; height:auto; transform:translateX(-50%);
-  filter:drop-shadow(0 6px 10px rgba(0,0,0,.5)); }
+/* the glowing pool (scoped to #hero-about so it never collides with #contact .pool) */
+#hero-about .pool{ position:absolute; inset:0; z-index:2; transform-origin:50% 58%; }
+#hero-about .pool-svg{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+#hero-about .pool-svg .tiles{ filter:drop-shadow(0 0 9px rgba(39,194,242,.5)); }
+#hero-about .water{ position:absolute; inset:0; width:100%; height:100%; z-index:3; pointer-events:none; mix-blend-mode:screen; }
+#hero-about .water-glow{ position:absolute; top:0; left:0; width:340px; height:340px; z-index:3; pointer-events:none;
+  border-radius:50%; mix-blend-mode:screen;
+  background:radial-gradient(circle, rgba(39,194,242,.16) 0%, rgba(39,194,242,.05) 40%, transparent 70%); }
+#hero-about .pool-vignette{ position:absolute; inset:0; z-index:4; pointer-events:none;
+  background:
+    radial-gradient(120% 110% at 50% 46%, transparent 52%, rgba(2,6,8,.66) 100%),
+    linear-gradient(180deg, rgba(2,6,8,.5) 0%, transparent 16%, transparent 86%, rgba(2,6,8,.55) 100%); }
 
 /* poolside copy (flat overlay) */
-.hero-copy{ position:absolute; z-index:5; left:0; right:0; top:15%; display:flex; flex-direction:column; align-items:center; gap:1.1rem; text-align:center; pointer-events:none; }
-.void-dot{ width:13px; height:13px; border-radius:50%; background:var(--zima); box-shadow:0 0 26px 9px rgba(31,162,214,.7); }
+.hero-copy{ position:absolute; z-index:5; left:0; right:0; top:14%; display:flex; flex-direction:column; align-items:center; gap:1.1rem; text-align:center; pointer-events:none;
+  text-shadow:0 2px 26px rgba(2,8,14,.7); }
+.void-dot{ width:13px; height:13px; border-radius:50%; background:var(--zima); box-shadow:0 0 26px 9px rgba(59,179,224,.7); }
 .void-mark{ font-weight:300; font-size:var(--fs-hero); letter-spacing:-.035em; line-height:.9; }
 .void-tag{ color:var(--ink-soft); }
-.scroll-cue{ position:absolute; z-index:5; bottom:7%; left:50%; transform:translateX(-50%); color:var(--ink-faint); opacity:.7; animation:bob 2.4s ease-in-out infinite; }
+.scroll-cue{ position:absolute; z-index:5; bottom:7%; left:50%; transform:translateX(-50%); color:var(--ink-soft); opacity:.66; animation:bob 2.4s ease-in-out infinite; }
 @keyframes bob{ 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
 
 /* signature (upper, fades out) + about (centre) — kept apart so they never overlap */

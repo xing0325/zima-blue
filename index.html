@@ -58,44 +58,72 @@
 
   <main id="top">
 
-    <!-- ===== 01 · Hero = a deep tiled shaft (robot tiling) → fall into the cosmos ===== -->
+    <!-- ===== 01 · Hero = the glowing pool, a rail robot tiling the wall → dive into the cosmos ===== -->
     <section id="hero-about" class="pin-stage" data-beat="01">
-      <!-- well-bottom cosmos, revealed as you fall through -->
+      <!-- deep cosmos, revealed as you dive through the water into 悟道 -->
       <div class="cosmos" data-cosmos>
-        <div class="nebula"></div>
-        <div class="stars" data-stars></div>
+        <div class="neb-band"></div>
+        <div class="core-glow"></div>
+        <canvas class="starfield" data-stars></canvas>
       </div>
 
-      <!-- the shaft: concentric tiled frames receding to the dark bottom -->
-      <div class="shaft" data-shaft>
-        <div class="rings" data-rings></div>
-        <svg class="pbot" data-bot viewBox="-3 -7 86 100" fill="none" aria-hidden="true">
-          <g class="pbot-arm" data-arm>
-            <line x1="40" y1="34" x2="40" y2="58" stroke="#7fb6d6" stroke-width="4" stroke-linecap="round"/>
-            <line x1="40" y1="58" x2="58" y2="74" stroke="#9fd0ea" stroke-width="4" stroke-linecap="round"/>
-            <rect class="pbot-tile" x="52" y="70" width="12" height="12" fill="#1FA2D6"/>
+      <!-- the glowing pool: a crude rail robot lays glowing tiles along the wall -->
+      <div class="pool" data-pool>
+        <svg class="pool-svg" viewBox="0 0 1100 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs>
+            <linearGradient id="hero-sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#0A1024"/>
+              <stop offset=".55" stop-color="#15243A"/>
+              <stop offset=".82" stop-color="#7A1F2B" stop-opacity=".5"/>
+              <stop offset="1" stop-color="#C2412E" stop-opacity=".45"/>
+            </linearGradient>
+            <linearGradient id="hero-wall" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#26323f"/>
+              <stop offset=".5" stop-color="#141d27"/>
+              <stop offset="1" stop-color="#0a1118"/>
+            </linearGradient>
+            <linearGradient id="hero-rail" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#B4A99F"/>
+              <stop offset=".55" stop-color="#9C9189"/>
+              <stop offset="1" stop-color="#5E6B72"/>
+            </linearGradient>
+            <radialGradient id="hero-tile" cx="38%" cy="30%" r="85%">
+              <stop offset="0" stop-color="#7FE9E6"/>
+              <stop offset=".5" stop-color="#27C2F2"/>
+              <stop offset="1" stop-color="#1B82A4"/>
+            </radialGradient>
+          </defs>
+
+          <rect x="0" y="0" width="1100" height="600" fill="url(#hero-sky)"/>
+          <g data-towers></g>
+
+          <!-- the wall the robot is tiling (drained pool side, receding) -->
+          <polygon points="0,238 1100,396 1100,600 0,600" fill="url(#hero-wall)"/>
+
+          <!-- rail + glowing tile band + robot all share the wall's slope -->
+          <g data-band transform="translate(0,322) rotate(7.4)">
+            <rect class="rail-pipe" x="-140" y="-150" width="1520" height="24" rx="12" fill="url(#hero-rail)"/>
+            <rect class="rail-spec" x="-140" y="-151" width="1520" height="3" rx="1.5" fill="#E7E0D6" opacity=".55"/>
+            <rect class="rail-track" x="-140" y="-114" width="1520" height="7" rx="3" fill="#3a4750"/>
+            <g data-tiles class="tiles"></g>
+            <g data-bot></g>
           </g>
-          <rect x="22" y="8" width="36" height="30" rx="9" fill="#0c6f9f" stroke="#36c0ef" stroke-width="2"/>
-          <g data-bot-lens>
-            <circle cx="40" cy="23" r="8" fill="#04070d"/>
-            <circle cx="40" cy="23" r="4.4" fill="#36c0ef"/>
-            <circle cx="42" cy="21" r="1.4" fill="#fff"/>
-          </g>
-          <line x1="40" y1="8" x2="40" y2="0" stroke="#36c0ef" stroke-width="2"/>
-          <circle cx="40" cy="-2" r="2.6" fill="#7fe3ff"/>
         </svg>
-      </div>
-      <div class="shaft-vignette"></div>
 
-      <!-- poolside copy (flat overlay) -->
+        <canvas class="water" data-water></canvas>
+        <div class="water-glow" data-glow></div>
+        <div class="pool-vignette"></div>
+      </div>
+
+      <!-- poolside copy -->
       <div class="hero-copy" data-hero-copy>
         <span class="void-dot" data-void-dot></span>
         <h1 class="void-mark">chichu</h1>
         <p class="void-tag mono">十八岁 · vibe coder · 在寻找更好的交互</p>
       </div>
-      <div class="scroll-cue mono" data-scroll-cue>向下滚动 ↓ 坠入</div>
+      <div class="scroll-cue mono" data-scroll-cue>向下滚动 ↓ 潜入</div>
 
-      <!-- signature draws during the fall, then dissolves before About -->
+      <!-- signature draws during the dive, then dissolves before About -->
       <div class="sig-layer" data-sig-layer>
         <svg class="sig" viewBox="0 0 760 240" fill="none" aria-label="chichu 的签名">
           <path class="sig-main" d="M70 168 C54 120 116 96 124 138 C130 172 132 58 152 58 C170 58 150 152 168 138 C182 127 188 152 200 150 C214 148 206 104 214 102 C222 150 240 172 256 138 C238 112 290 96 300 138 C306 172 308 58 328 58 C346 58 326 152 346 138 C362 126 374 152 392 150 C408 148 400 104 410 102 C414 150 436 164 456 138 C464 127 460 100 468 94 C482 112 540 150 660 118"
